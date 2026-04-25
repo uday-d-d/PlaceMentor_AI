@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Dashboard - PlaceMentor AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#c6c6cd",
+                    "primary-container": "#131b2e",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#ffb690",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#d3e4fe",
+                    "on-surface-variant": "#45464d",
+                    "on-secondary-fixed-variant": "#783200",
+                    "secondary": "#9d4300",
+                    "surface-container": "#e5eeff",
+                    "outline": "#76777d",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-container-highest": "#d3e4fe",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "on-tertiary-fixed": "#002113",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#dae2fd",
+                    "primary": "#000000",
+                    "on-secondary-container": "#5c2400",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "on-surface": "#0b1c30",
+                    "inverse-surface": "#213145",
+                    "background": "#f8f9ff",
+                    "surface-container-high": "#dce9ff",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "surface-tint": "#565e74",
+                    "tertiary-container": "#002113",
+                    "tertiary-fixed": "#6ffbbe",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-container-low": "#eff4ff",
+                    "surface-bright": "#f8f9ff",
+                    "on-secondary-fixed": "#341100",
+                    "on-primary-container": "#7c839b",
+                    "tertiary": "#000000",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-primary-fixed": "#131b2e",
+                    "on-background": "#0b1c30",
+                    "on-tertiary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "xs": "4px",
+                    "base-unit": "4px",
+                    "3xl": "64px",
+                    "gutter": "24px",
+                    "lg": "24px",
+                    "xl": "32px",
+                    "2xl": "48px",
+                    "md": "16px",
+                    "margin": "32px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "button": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "h2": ["Inter"],
+                    "h1": ["Inter"],
+                    "body-md": ["Inter"],
+                    "h3": ["Inter"]
+            },
+            "fontSize": {
+                    "label-sm": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                    "button": ["16px", {"lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h2": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "h1": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h3": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9ff; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .card-shadow { shadow: 0px 4px 6px rgba(15, 23, 42, 0.04); }
+        .hover-lift { transition: transform 0.2s ease-out; }
+        .hover-lift:hover { transform: translateY(-4px); }
+        .chart-radar { clip-path: polygon(50% 0%, 100% 38%, 81% 100%, 19% 100%, 0% 38%); }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased overflow-x-hidden">
+<!-- SideNavBar (from JSON) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-slate-900 border-r border-slate-800 shadow-xl z-50 flex flex-col h-full py-6 font-inter text-sm antialiased text-white">
+<div class="px-6 mb-8">
+<h1 class="text-lg font-black text-white">PlaceMentor AI</h1>
+<p class="text-slate-400 text-xs mt-1">Career Readiness Path</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="bg-slate-800 text-white rounded-lg flex items-center gap-3 px-4 py-3 mx-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-slate-400 hover:bg-slate-800/50 hover:text-slate-100 rounded-lg flex items-center gap-3 px-4 py-3 mx-2 transition-all duration-200 focus:ring-2 focus:ring-slate-500" href="#">
+<span class="material-symbols-outlined" data-icon="psychology">psychology</span>
+<span>Skills Assessment</span>
+</a>
+<a class="text-slate-400 hover:bg-slate-800/50 hover:text-slate-100 rounded-lg flex items-center gap-3 px-4 py-3 mx-2 transition-all duration-200 focus:ring-2 focus:ring-slate-500" href="#">
+<span class="material-symbols-outlined" data-icon="work">work</span>
+<span>Job Matches</span>
+</a>
+<a class="text-slate-400 hover:bg-slate-800/50 hover:text-slate-100 rounded-lg flex items-center gap-3 px-4 py-3 mx-2 transition-all duration-200 focus:ring-2 focus:ring-slate-500" href="#">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span>Training</span>
+</a>
+<a class="text-slate-400 hover:bg-slate-800/50 hover:text-slate-100 rounded-lg flex items-center gap-3 px-4 py-3 mx-2 transition-all duration-200 focus:ring-2 focus:ring-slate-500" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span>Applications</span>
+</a>
+<a class="text-slate-400 hover:bg-slate-800/50 hover:text-slate-100 rounded-lg flex items-center gap-3 px-4 py-3 mx-2 transition-all duration-200 focus:ring-2 focus:ring-slate-500" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4 pt-6">
+<div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+<div class="flex items-center gap-3 mb-3">
+<img alt="Student Profile" class="w-10 h-10 rounded-full object-cover" data-alt="Close-up portrait of a young professional student smiling in a modern office environment with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDw4B9p905xxcV-D3CCNTkFUrNpyvgL0wUCy5NmhfyEqIgprtmzhumoW8ldzTj4uf9SuIOekFgygvRzabEEJ-vd3eDy-1ZoheNf6IH3WyxpWpOxz62jriK_94dAf1Paafk54Wlg4z73CpuPtw6h7RxZFKDpKZVKvcVWj2jmc19zTTXEz_lhA6eIVTXYDL1489Zya9E9OVPX8rXd6Ew2-_7UICvai-FSTt_OPGJFzVuyHy4YR8i4by9EvkAGUyPYYUYrfj8h2e_CYEdr"/>
+<div>
+<p class="text-xs font-bold text-white">Alex Johnson</p>
+<p class="text-[10px] text-slate-400">Junior Developer Path</p>
+</div>
+</div>
+<button class="w-full bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold py-2 rounded-lg transition-colors active:scale-95">
+                    View Placement Status
+                </button>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen p-8 max-w-7xl">
+<!-- Header -->
+<header class="mb-10 flex justify-between items-end">
+<div>
+<h2 class="font-h2 text-h2 text-on-surface">Welcome back, Alex.</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">You're in the top 15% of candidates this week. Keep up the momentum!</p>
+</div>
+<div class="flex gap-4">
+<div class="bg-surface-container flex items-center px-4 py-2 rounded-xl border border-outline-variant">
+<span class="material-symbols-outlined text-primary text-xl mr-2" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-sm text-label-sm text-on-surface">Oct 24, 2023</span>
+</div>
+</div>
+</header>
+<!-- Stats Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg mb-10">
+<!-- Progress Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-primary-container p-2 rounded-lg">
+<span class="material-symbols-outlined text-white" data-icon="trending_up">trending_up</span>
+</div>
+<span class="text-xs font-bold text-tertiary-fixed-dim bg-tertiary-container px-2 py-1 rounded-full">+12% vs last week</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Overall Progress</p>
+<h3 class="font-h3 text-h3 text-on-surface mt-1">78.4%</h3>
+<div class="w-full bg-surface-container rounded-full h-2 mt-4">
+<div class="bg-primary-container h-2 rounded-full" style="width: 78.4%"></div>
+</div>
+</div>
+<!-- Avg Mock Score -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-secondary-container p-2 rounded-lg">
+<span class="material-symbols-outlined text-white" data-icon="quiz">quiz</span>
+</div>
+<span class="text-xs font-bold text-on-surface-variant bg-surface-container px-2 py-1 rounded-full">Top 10%</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Avg Mock Score</p>
+<h3 class="font-h3 text-h3 text-on-surface mt-1">85 / 100</h3>
+<p class="text-xs text-on-surface-variant mt-4">Based on last 5 assessments</p>
+</div>
+<!-- Interview Readiness -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-tertiary-container p-2 rounded-lg">
+<span class="material-symbols-outlined text-tertiary-fixed" data-icon="record_voice_over">record_voice_over</span>
+</div>
+<div class="flex">
+<span class="material-symbols-outlined text-secondary-container text-xs" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-secondary-container text-xs" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-secondary-container text-xs" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-secondary-container text-xs" data-icon="star" data-weight="fill">star</span>
+<span class="material-symbols-outlined text-outline-variant text-xs" data-icon="star">star</span>
+</div>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Interview Readiness</p>
+<h3 class="font-h3 text-h3 text-on-surface mt-1">High Readiness</h3>
+<p class="text-xs text-on-surface-variant mt-4">Ready for Junior Dev Roles</p>
+</div>
+</div>
+<!-- Main Insights Section -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg items-start">
+<!-- Skills Radar Widget -->
+<div class="lg:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm h-full">
+<h3 class="font-h3 text-lg font-bold text-on-surface mb-6">Skill Fingerprint</h3>
+<div class="relative w-full aspect-square flex items-center justify-center">
+<!-- Placeholder for Radar Chart Visual -->
+<div class="absolute inset-0 border border-dashed border-outline-variant rounded-full opacity-20"></div>
+<div class="absolute inset-8 border border-dashed border-outline-variant rounded-full opacity-40"></div>
+<div class="absolute inset-16 border border-dashed border-outline-variant rounded-full opacity-60"></div>
+<div class="chart-radar w-3/4 h-3/4 bg-primary-container/20 border-2 border-primary-container flex items-center justify-center">
+<div class="chart-radar w-1/2 h-1/2 bg-primary-container/40"></div>
+</div>
+<!-- Labels -->
+<div class="absolute top-0 text-[10px] font-bold text-on-surface-variant">TECHNICAL</div>
+<div class="absolute right-0 top-1/3 text-[10px] font-bold text-on-surface-variant">APTITUDE</div>
+<div class="absolute right-4 bottom-0 text-[10px] font-bold text-on-surface-variant">SOFT SKILLS</div>
+<div class="absolute left-4 bottom-0 text-[10px] font-bold text-on-surface-variant">PROBLEM SOLVING</div>
+<div class="absolute left-0 top-1/3 text-[10px] font-bold text-on-surface-variant">LOGIC</div>
+</div>
+<div class="mt-8 space-y-3">
+<div class="flex justify-between items-center text-xs">
+<span class="text-on-surface-variant">Core Tech Stack</span>
+<span class="font-bold text-primary">92%</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-on-surface-variant">Communication</span>
+<span class="font-bold text-primary">74%</span>
+</div>
+</div>
+</div>
+<!-- Mock Test Analysis -->
+<div class="lg:col-span-8 space-y-lg">
+<!-- Mock Test analysis widget -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-h3 text-lg font-bold text-on-surface">Recent Mock Performance</h3>
+<button class="text-primary font-label-sm text-sm hover:underline">View detailed logs</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low">
+<tr class="text-on-surface-variant text-xs uppercase tracking-wider">
+<th class="py-3 px-4 font-bold">Topic</th>
+<th class="py-3 px-4 font-bold">Score</th>
+<th class="py-3 px-4 font-bold">Difficulty</th>
+<th class="py-3 px-4 font-bold">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<tr class="hover:bg-surface-container/30 transition-colors">
+<td class="py-4 px-4 font-body-md text-sm font-medium">Data Structures &amp; Algos</td>
+<td class="py-4 px-4 font-body-md text-sm">88%</td>
+<td class="py-4 px-4">
+<span class="text-[10px] font-bold bg-error-container text-on-error-container px-2 py-0.5 rounded">Hard</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center text-tertiary-fixed-dim">
+<span class="material-symbols-outlined text-sm mr-1" data-icon="check_circle" data-weight="fill">check_circle</span>
+<span class="text-xs font-bold">Passed</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-container/30 transition-colors">
+<td class="py-4 px-4 font-body-md text-sm font-medium">System Design Basics</td>
+<td class="py-4 px-4 font-body-md text-sm">72%</td>
+<td class="py-4 px-4">
+<span class="text-[10px] font-bold bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">Medium</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center text-secondary">
+<span class="material-symbols-outlined text-sm mr-1" data-icon="pending">pending</span>
+<span class="text-xs font-bold">Improve</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-container/30 transition-colors">
+<td class="py-4 px-4 font-body-md text-sm font-medium">Javascript ES6+</td>
+<td class="py-4 px-4 font-body-md text-sm">95%</td>
+<td class="py-4 px-4">
+<span class="text-[10px] font-bold bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">Easy</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center text-tertiary-fixed-dim">
+<span class="material-symbols-outlined text-sm mr-1" data-icon="check_circle" data-weight="fill">check_circle</span>
+<span class="text-xs font-bold">Passed</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Interview Performance History -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm">
+<h3 class="font-h3 text-lg font-bold text-on-surface mb-6">AI Interview History</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex items-center p-4 bg-background border border-outline-variant rounded-xl">
+<div class="w-12 h-12 bg-primary-container rounded-lg flex items-center justify-center mr-4">
+<span class="material-symbols-outlined text-white" data-icon="videocam">videocam</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Behavioral Round #4</p>
+<p class="text-[10px] text-on-surface-variant">Completed 2 days ago • Score: 78/100</p>
+</div>
+<span class="material-symbols-outlined ml-auto text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="flex items-center p-4 bg-background border border-outline-variant rounded-xl">
+<div class="w-12 h-12 bg-primary-container rounded-lg flex items-center justify-center mr-4">
+<span class="material-symbols-outlined text-white" data-icon="terminal">terminal</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Technical Live Coding</p>
+<p class="text-[10px] text-on-surface-variant">Completed 5 days ago • Score: 91/100</p>
+</div>
+<span class="material-symbols-outlined ml-auto text-on-surface-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions Canvas -->
+<div class="mt-10">
+<h3 class="font-h3 text-lg font-bold text-on-surface mb-6">Quick Actions</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Start Mock Test -->
+<div class="group cursor-pointer bg-primary-container p-xl rounded-2xl hover-lift shadow-lg relative overflow-hidden">
+<div class="absolute -right-8 -bottom-8 opacity-10 group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-white text-[120px]" data-icon="edit_document">edit_document</span>
+</div>
+<span class="material-symbols-outlined text-white text-3xl mb-4" data-icon="quiz">quiz</span>
+<h4 class="text-white font-bold text-xl mb-2">Start Mock Test</h4>
+<p class="text-slate-400 text-sm mb-6">Validate your technical skills with time-bound assessments.</p>
+<div class="flex items-center text-white text-sm font-bold">
+                        Take Assessment <span class="material-symbols-outlined ml-2 text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<!-- Start AI Interview -->
+<div class="group cursor-pointer bg-white border border-outline-variant p-xl rounded-2xl hover-lift shadow-sm relative overflow-hidden">
+<div class="absolute -right-8 -bottom-8 opacity-5 group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-primary text-[120px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl mb-4" data-icon="mic_external_on">mic_external_on</span>
+<h4 class="text-on-surface font-bold text-xl mb-2">Start AI Interview</h4>
+<p class="text-on-surface-variant text-sm mb-6">Real-time feedback on confidence, pace, and clarity.</p>
+<div class="flex items-center text-primary text-sm font-bold">
+                        Begin Session <span class="material-symbols-outlined ml-2 text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<!-- View Reports -->
+<div class="group cursor-pointer bg-white border border-outline-variant p-xl rounded-2xl hover-lift shadow-sm relative overflow-hidden">
+<div class="absolute -right-8 -bottom-8 opacity-5 group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-primary text-[120px]" data-icon="analytics">analytics</span>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl mb-4" data-icon="insights">insights</span>
+<h4 class="text-on-surface font-bold text-xl mb-2">View Reports</h4>
+<p class="text-on-surface-variant text-sm mb-6">Analyze your performance trends and growth curves.</p>
+<div class="flex items-center text-primary text-sm font-bold">
+                        Open Insights <span class="material-symbols-outlined ml-2 text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer / Success Metric -->
+<footer class="mt-12 pt-8 border-t border-outline-variant flex justify-between items-center">
+<p class="text-xs text-on-surface-variant">© 2023 PlaceMentor AI. All rights reserved.</p>
+<div class="flex gap-4">
+<a class="text-xs text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-xs text-on-surface-variant hover:text-primary transition-colors" href="#">Support Center</a>
+</div>
+</footer>
+</main>
+</body></html>

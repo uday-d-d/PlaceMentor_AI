@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Registration | PlaceMentor AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c6c6cd",
+                        "primary-container": "#131b2e",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#d3e4fe",
+                        "on-surface-variant": "#45464d",
+                        "on-secondary-fixed-variant": "#783200",
+                        "secondary": "#9d4300",
+                        "surface-container": "#e5eeff",
+                        "outline": "#76777d",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-dim": "#cbdbf5",
+                        "secondary-container": "#fd761a",
+                        "on-tertiary-container": "#009668",
+                        "inverse-primary": "#bec6e0",
+                        "secondary-fixed": "#ffdbca",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-fixed": "#002113",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#dae2fd",
+                        "primary": "#000000",
+                        "on-secondary-container": "#5c2400",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-surface": "#0b1c30",
+                        "inverse-surface": "#213145",
+                        "background": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-tint": "#565e74",
+                        "tertiary-container": "#002113",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-container-low": "#eff4ff",
+                        "surface-bright": "#f8f9ff",
+                        "on-secondary-fixed": "#341100",
+                        "on-primary-container": "#7c839b",
+                        "tertiary": "#000000",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-primary-fixed": "#131b2e",
+                        "on-background": "#0b1c30",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xs": "4px",
+                        "base-unit": "4px",
+                        "3xl": "64px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "2xl": "48px",
+                        "md": "16px",
+                        "margin": "32px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "button": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h2": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h3": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "button": ["16px", {"lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h2": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h1": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h3": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .form-input-focus:focus {
+            box-shadow: 0 0 0 3px rgba(19, 27, 46, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col">
+<main class="flex-grow flex items-center justify-center p-lg">
+<div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-xl bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<!-- Left Side: Visual/Branding Section -->
+<div class="hidden lg:flex flex-col justify-between p-xl bg-primary-container relative overflow-hidden">
+<div class="z-10">
+<div class="text-white text-xl font-bold tracking-tight mb-3xl">PlaceMentor AI</div>
+<h1 class="font-h1 text-h2 text-white mb-lg">Bridge the Gap to Your Dream Career.</h1>
+<p class="text-on-primary-container font-body-lg mb-xl max-w-md">
+                        Join thousands of students who are transforming their academic success into professional placements with our AI-driven career pathing.
+                    </p>
+</div>
+<div class="z-10 bg-white/5 backdrop-blur-sm p-lg rounded-xl border border-white/10">
+<div class="flex items-center gap-md mb-sm">
+<span class="material-symbols-outlined text-tertiary-fixed text-3xl">school</span>
+<div class="font-h3 text-white text-md">Skill Assessment</div>
+</div>
+<p class="text-on-primary-container text-sm">Validate your technical skills and get certified for top-tier industry roles.</p>
+</div>
+<!-- Abstract Decorative Element -->
+<div class="absolute -bottom-24 -left-24 w-64 h-64 bg-secondary-container/20 rounded-full blur-3xl"></div>
+<div class="absolute -top-24 -right-24 w-96 h-96 bg-primary-fixed-dim/10 rounded-full blur-3xl"></div>
+<div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+<div class="w-full h-full" data-alt="vibrant university library atmosphere with students collaborating around modern workspace with soft sunlight and professional academic feel" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBO_jboFw3jUoBwASRKOKHmqv_fCjNJ-oexV-Es5c_K1pk5VtBmVPSIxoV6BYema8vUxWrP9tS1x31NYxKHSDvoyjHIhwHLf3k7oxJ5TRVL__NNUU2XcKM06FcXk-0-zRSNGFPPsmHJiEE39l8y6i52VaAVbInUPLFtUsHHTo-Z5xOG7xZnbfk_ZLmivfxsLmDN7-hnclsTqa9gJf3CfhjAGUjbay5kB7Mm_3FkFGzSmifgeoRUaOWFONHRKKrWwFCVOKsqDJDTFCFO'); background-size: cover; background-position: center;"></div>
+</div>
+</div>
+<!-- Right Side: Registration Form Section -->
+<div class="p-lg lg:p-xl flex flex-col justify-center">
+<div class="mb-xl">
+<h2 class="font-h2 text-h3 text-on-surface mb-xs">Create Student Profile</h2>
+<p class="text-on-surface-variant font-body-md">Fill in your details to start your professional journey.</p>
+</div>
+<form class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- Student Name -->
+<div class="md:col-span-2">
+<label class="block font-label-sm text-on-surface-variant mb-xs" for="student_name">Student Name</label>
+<input class="w-full p-md bg-white border border-outline-variant rounded-lg font-body-md text-on-surface focus:border-primary-container form-input-focus transition-all duration-200" id="student_name" placeholder="Enter your full name" type="text"/>
+</div>
+<!-- Branch Dropdown -->
+<div class="col-span-1">
+<label class="block font-label-sm text-on-surface-variant mb-xs" for="branch">Branch</label>
+<select class="w-full p-md bg-white border border-outline-variant rounded-lg font-body-md text-on-surface focus:border-primary-container form-input-focus transition-all duration-200 appearance-none" id="branch">
+<option disabled="" selected="" value="">Select Branch</option>
+<option value="cs">Computer Science</option>
+<option value="it">Information Technology</option>
+<option value="ece">Electronics &amp; Communication</option>
+<option value="me">Mechanical Engineering</option>
+<option value="ee">Electrical Engineering</option>
+</select>
+</div>
+<!-- Enrollment/Roll Number -->
+<div class="col-span-1">
+<label class="block font-label-sm text-on-surface-variant mb-xs" for="enrollment">Enrollment Number</label>
+<input class="w-full p-md bg-white border border-outline-variant rounded-lg font-body-md text-on-surface focus:border-primary-container form-input-focus transition-all duration-200" id="enrollment" placeholder="Roll No / ID" type="text"/>
+</div>
+<!-- CGPA/Percentage -->
+<div class="col-span-1">
+<label class="block font-label-sm text-on-surface-variant mb-xs" for="cgpa">CGPA / Percentage</label>
+<input class="w-full p-md bg-white border border-outline-variant rounded-lg font-body-md text-on-surface focus:border-primary-container form-input-focus transition-all duration-200" id="cgpa" placeholder="Current aggregate" type="text"/>
+</div>
+<!-- Username -->
+<div class="col-span-1">
+<label class="block font-label-sm text-on-surface-variant mb-xs" for="username">Username</label>
+<input class="w-full p-md bg-white border border-outline-variant rounded-lg font-body-md text-on-surface focus:border-primary-container form-input-focus transition-all duration-200" id="username" placeholder="Choose unique username" type="text"/>
+</div>
+<!-- Password -->
+<div class="col-span-1">
+<label class="block font-label-sm text-on-surface-variant mb-xs" for="password">Password</label>
+<input class="w-full p-md bg-white border border-outline-variant rounded-lg font-body-md text-on-surface focus:border-primary-container form-input-focus transition-all duration-200" id="password" placeholder="••••••••" type="password"/>
+</div>
+<!-- Confirm Password -->
+<div class="col-span-1">
+<label class="block font-label-sm text-on-surface-variant mb-xs" for="confirm_password">Confirm Password</label>
+<input class="w-full p-md bg-white border border-outline-variant rounded-lg font-body-md text-on-surface focus:border-primary-container form-input-focus transition-all duration-200" id="confirm_password" placeholder="••••••••" type="password"/>
+</div>
+<!-- Action Buttons -->
+<div class="md:col-span-2 pt-md">
+<button class="w-full bg-secondary-container text-white py-md px-xl rounded-lg font-button hover:brightness-110 active:scale-[0.98] transition-all shadow-sm" type="submit">
+                            Sign Up
+                        </button>
+</div>
+<!-- Login Link -->
+<div class="md:col-span-2 text-center mt-sm">
+<p class="text-on-surface-variant font-label-sm">
+                            Already have an account? 
+                            <a class="text-secondary font-semibold hover:underline decoration-2 underline-offset-4 ml-xs" href="#">Login here</a>
+</p>
+</div>
+</form>
+</div>
+</div>
+</main>
+<!-- Footer for Terms -->
+<footer class="p-lg text-center">
+<p class="text-on-surface-variant font-label-sm opacity-60">© 2024 PlaceMentor AI. All rights reserved. By signing up, you agree to our Terms of Service and Privacy Policy.</p>
+</footer>
+</body></html>

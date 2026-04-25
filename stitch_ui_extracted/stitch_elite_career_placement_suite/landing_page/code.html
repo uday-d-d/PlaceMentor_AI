@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PlaceMentor AI - Your Path to Professional Excellence</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c6c6cd",
+                        "primary-container": "#131b2e",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#d3e4fe",
+                        "on-surface-variant": "#45464d",
+                        "on-secondary-fixed-variant": "#783200",
+                        "secondary": "#9d4300",
+                        "surface-container": "#e5eeff",
+                        "outline": "#76777d",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-fixed": "#002113",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#dae2fd",
+                        "primary": "#000000",
+                        "on-secondary-container": "#5c2400",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-surface": "#0b1c30",
+                        "inverse-surface": "#213145",
+                        "background": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-tint": "#565e74",
+                        "tertiary-container": "#002113",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-container-low": "#eff4ff",
+                        "surface-bright": "#f8f9ff",
+                        "on-secondary-fixed": "#341100",
+                        "on-primary-container": "#7c839b",
+                        "tertiary": "#000000",
+                        "primary-fixed-dim": "#bec6e0",
+                        "on-primary-fixed": "#131b2e",
+                        "on-background": "#0b1c30",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xs": "4px",
+                        "base-unit": "4px",
+                        "3xl": "64px",
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "xl": "32px",
+                        "2xl": "48px",
+                        "md": "16px",
+                        "margin": "32px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "button": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h2": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h3": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "button": ["16px", {"lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h2": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "h1": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "h3": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopNavBar -->
+<header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm fixed top-0 z-50 w-full">
+<div class="flex items-center justify-between px-6 py-4 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">PlaceMentor AI</span>
+<nav class="hidden md:flex items-center gap-6 font-inter text-sm font-medium">
+<a class="text-slate-900 dark:text-white border-b-2 border-slate-900 dark:border-slate-100 pb-1" href="#">Home</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors duration-200" href="#">Features</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors duration-200" href="#">About</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex gap-4">
+<button class="font-inter text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95">Login</button>
+<button class="font-inter text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95">Register</button>
+</div>
+<button class="bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-button shadow-md hover:brightness-110 active:scale-95 transition-all">
+                    Get Started
+                </button>
+</div>
+</div>
+</header>
+<main class="pt-24 overflow-hidden">
+<!-- Hero Section -->
+<section class="relative px-6 py-16 md:py-24 max-w-7xl mx-auto">
+<div class="grid md:grid-cols-2 gap-12 items-center">
+<div class="z-10">
+<div class="inline-flex items-center gap-2 bg-surface-container px-3 py-1 rounded-full text-primary-container font-label-sm text-label-sm mb-6 border border-outline-variant/30">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>AI-Powered Career Transformation</span>
+</div>
+<h1 class="font-h1 text-h1 text-on-background mb-6 leading-tight">
+                        Bridge the Gap to Your <span class="text-secondary">Dream Career</span> with AI
+                    </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-10 max-w-lg">
+                        CareerBridge AI uses advanced neural networks to map your skills, simulate realistic interviews, and connect you with high-growth placement opportunities.
+                    </p>
+<div class="flex flex-wrap gap-4">
+<button class="bg-secondary text-on-secondary px-8 py-4 rounded-xl font-button text-button shadow-lg shadow-secondary/20 hover:-translate-y-1 transition-all active:scale-95">
+                            Get Started Now
+                        </button>
+<button class="flex items-center gap-2 bg-white border border-outline-variant px-8 py-4 rounded-xl font-button text-button text-on-surface hover:bg-surface-container transition-all active:scale-95">
+<span class="material-symbols-outlined">play_circle</span>
+                            Watch Demo
+                        </button>
+</div>
+<div class="mt-12 flex items-center gap-4 text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex -space-x-2">
+<img alt="User Profile" class="w-10 h-10 rounded-full border-2 border-white" data-alt="Portrait of a young professional woman in a modern office setting with natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDylBGfb7ZhC-zCxpgADGuN7DtszW5QlDiWSDmjK57pYdMEkFMdP2FVkr1m94gJuVJGZMWGq-ugj24iVW8K3hx3aMA7FEGoUN2ZkMLMyztZKkjouy6EoyCLrmzuY5bMr_eANsjsL_y5E03LyRv_qCI3nYrbyrEx4Dh_ICh7WLuVrh3NJ8NzAdx9op9-2V_fRX16CuKeJRCyIiQkYC5VZwTzxnM2ZvlPOZsyx_1hA7XMWNPh-41q1L6Oxod5k65AZ2F0zTKp801NIEW"/>
+<img alt="User Profile" class="w-10 h-10 rounded-full border-2 border-white" data-alt="Portrait of a smiling young man wearing professional attire against a blurred city background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDULANEIEOQvRyxK79CU41TjfLywByN_mmn2LafdxrM3vnKJnJK0rEdr7xaQZa6acvjwpKyEhWsADLZBIqkO2NUhCa8GbAJd4defbGwWcdi78G9GaPuIFLp51smSheRNYHG4oDtvfmwsqnf309XIr-nD_Wm8Nq00Qmhw9PbJhmTYIAzk1uFXTW1V5U2tcxwrDJ5DsPaHk7cXzLyVU0ql23RfXKjIMZDnZFpcfBrfX0pcjfLC_sxoz2UUtim4JB36pwqdBm9DS2-BLgQ"/>
+<img alt="User Profile" class="w-10 h-10 rounded-full border-2 border-white" data-alt="Close up portrait of a successful professional person with a clean minimalist background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCF0AeuHDp_pdWxftA9lkqYHf-JHkrpp4cJRvin10g66o6ck2kstgvys9z9UCf6HA1O8IeCRu1Q8fS47-d2eLbW3zMI29bUDh96Li3BP-NTDO09nLjPx1dTx2yzABnjqnSPcD5PA_EFnqzPbmzrplWeXaBXpIgoPMcxcoQgtXqndEagOgObP6Fd-S7dlPA4UOofjP0YMFGfjINkXZSW1yURB0MIz0hqiB1ftu-0tv05SU4atH_D6bFXFex01Ue7dUfRN6vRdr8Cf5-S"/>
+</div>
+<span>Joined by 10,000+ students this month</span>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -top-12 -right-12 w-64 h-64 bg-secondary/10 rounded-full blur-3xl"></div>
+<div class="absolute -bottom-12 -left-12 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+<div class="relative bg-white rounded-3xl p-4 shadow-2xl border border-outline-variant/20 overflow-hidden">
+<img alt="Student Success Illustration" class="rounded-2xl w-full object-cover aspect-[4/3]" data-alt="Modern high-tech classroom with students using laptops and digital interfaces, soft blue and orange ambient lighting, futuristic clean aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxayaiQ_HHeT6e2QNKgaMaQ7yy-4lBMFQqNpqyfH0yPo5Ueg_1S_M1MACtXWvkFTMOpNhbSHAs2C5paR0JUjjH9pqNbSOtoIbD-T4Gqsz5_wKzynX1HJvTRZ4vbjhE2SRwKsXgZfFjVU_zsNmupgdf5QAcOKZv4Za-tIUmUh571SiuPzxVQxBmsop0Cbwmazkc6Uwc2FCitcZrFWFo-J7kJRttOQDQjaxl8F07vda8YZD7BWtItYtS9eiHpGPkDYTDUskkRz4ZNGhg"/>
+<!-- Floating Stats Card -->
+<div class="absolute bottom-10 -left-6 glass-card p-6 rounded-2xl shadow-xl max-w-[200px]">
+<div class="flex items-center gap-3 mb-2">
+<div class="bg-tertiary-fixed p-2 rounded-lg">
+<span class="material-symbols-outlined text-on-tertiary-fixed">trending_up</span>
+</div>
+<span class="font-h3 text-[20px] text-on-surface">94%</span>
+</div>
+<p class="text-[12px] font-medium text-on-surface-variant">Success placement rate for AI-trained students</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Bento Grid -->
+<section class="bg-surface-container-low py-24 px-6">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-h2 text-h2 text-on-surface mb-4">Precision Tools for Modern Hires</h2>
+<p class="text-on-surface-variant max-w-2xl mx-auto font-body-lg text-body-lg">
+                        We've built a suite of AI-driven features designed to replicate real-world placement cycles.
+                    </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[600px]">
+<!-- AI Interviews - Large Card -->
+<div class="md:col-span-8 bg-white p-8 rounded-3xl border border-outline-variant/30 shadow-sm flex flex-col justify-between overflow-hidden group hover:shadow-md transition-shadow">
+<div>
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 rounded-xl bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-white">videocam</span>
+</div>
+<h3 class="font-h3 text-h3">AI Interviews</h3>
+</div>
+<p class="text-on-surface-variant font-body-md max-w-md">
+                                Face-to-face simulation with adaptive AI avatars that analyze your body language, tone, and technical accuracy in real-time.
+                            </p>
+</div>
+<div class="mt-8 relative h-48 rounded-2xl bg-surface-container-highest overflow-hidden">
+<img alt="AI Interview Interface" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Digital interface showing a professional AI avatar conducting a video interview with data overlays and speech waveform graphics" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCA1AOJZ-8OSd-vtEWOysAy0CDS4qxnXlqU3QH_abEptoXfWNfDJloryV74b_Rshc4mNxsR20tJJoas5M8WlWZLvrkn1-J4HirgDG_xQH5Ncjba6TR3Ov_bnYE5KU_JtWpcjCoJpsiwdIV5fOJ2HHuFCdQwmAI7hW8Tmn9E2t-uu95usqszWkbaPQ1AKXH9et8ELib1QYhY-BlGxYJP8q8pkN7J3tW0MNBCXINCXmOCxVycKU7VgW1720Aj5UORfGXySTeYAM4Nt2ez"/>
+</div>
+</div>
+<!-- Performance Analytics -->
+<div class="md:col-span-4 bg-slate-900 p-8 rounded-3xl border border-slate-800 shadow-sm flex flex-col group hover:-translate-y-1 transition-all">
+<div class="w-12 h-12 rounded-xl bg-secondary flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-white">insights</span>
+</div>
+<h3 class="font-h3 text-h3 text-white mb-4">Performance Analytics</h3>
+<p class="text-slate-400 font-body-md mb-8">
+                            Deep-dive metrics into your career readiness score, highlighting technical gaps and soft-skill strengths.
+                        </p>
+<div class="mt-auto flex flex-col gap-3">
+<div class="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-3/4 rounded-full"></div>
+</div>
+<div class="flex justify-between text-slate-300 font-label-sm text-label-sm">
+<span>Readiness Score</span>
+<span>75%</span>
+</div>
+</div>
+</div>
+<!-- Mock Tests -->
+<div class="md:col-span-4 bg-white p-8 rounded-3xl border border-outline-variant/30 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary">quiz</span>
+</div>
+<h3 class="font-h3 text-h3 mb-4">Mock Tests</h3>
+<p class="text-on-surface-variant font-body-md">
+                            Industry-standard technical assessments tailored to specific company profiles like Google, Meta, and Amazon.
+                        </p>
+</div>
+<!-- Job Matching -->
+<div class="md:col-span-8 bg-surface-container p-8 rounded-3xl border border-outline-variant/30 shadow-sm flex items-center gap-8 group">
+<div class="flex-1">
+<h3 class="font-h3 text-h3 mb-4">Smart Job Matching</h3>
+<p class="text-on-surface-variant font-body-md">
+                                Our algorithm doesn't just look for keywords; it matches your potential with roles where you'll thrive most.
+                            </p>
+<button class="mt-6 flex items-center gap-2 text-secondary font-button font-bold group-hover:gap-4 transition-all">
+                                Explore Placements <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="hidden lg:block w-48 h-48 rounded-full border-4 border-white shadow-xl overflow-hidden">
+<img alt="Career Success" class="w-full h-full object-cover" data-alt="A diverse group of professionals celebrating a success in a bright, modern corporate atrium with glass walls" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2mFbJRQrXE8MVK-SFPlYM47PpGFyvorDuBt-S4NN91CseSgtV5uufYk8a1w4uOZUBGJgBTmC7txgmjO2bZ2xVxKmH5qVCvjZ-5fG9IBhawbTf2QvOqpN8tJpAUkGEPv4uZfQjsFkEF4H7Yx5Wg2M8LVF47wjtm_t4WxBuugDhlK5T8ixN2dmYOxQuXoorfp6LyFDs0cugIN_3bxxhltrAHpgfYnYxchVbkIr7jeFlQt3DtsjL28lBeEtUPDVZUN3FRa3rl22G9FpK"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Dashboard Preview / CTA -->
+<section class="py-24 px-6 overflow-hidden">
+<div class="max-w-7xl mx-auto bg-primary-container rounded-[40px] p-8 md:p-16 relative">
+<div class="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
+<div class="w-full h-full bg-gradient-to-l from-white/20 to-transparent"></div>
+</div>
+<div class="grid lg:grid-cols-2 gap-12 items-center">
+<div>
+<h2 class="font-h2 text-h2 text-white mb-6">Experience the Student Portal</h2>
+<p class="text-slate-400 font-body-lg text-body-lg mb-10">
+                            Track your growth in real-time with our student dashboard. Manage applications, review interview feedback, and access personalized training modules.
+                        </p>
+<ul class="space-y-4 mb-10">
+<li class="flex items-center gap-3 text-white">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>Unified Placement Tracking</span>
+</li>
+<li class="flex items-center gap-3 text-white">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>Instant AI Feedback Loop</span>
+</li>
+<li class="flex items-center gap-3 text-white">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>Verified Skills Certification</span>
+</li>
+</ul>
+<button class="bg-white text-primary-container px-8 py-4 rounded-xl font-button text-button hover:bg-slate-100 transition-all active:scale-95">
+                            Launch Student Portal
+                        </button>
+</div>
+<div class="relative lg:translate-x-12 translate-y-8">
+<div class="bg-slate-800 rounded-2xl p-2 shadow-2xl border border-slate-700">
+<div class="bg-background rounded-xl overflow-hidden flex h-[400px]">
+<!-- Sidebar Mock -->
+<div class="w-16 bg-slate-900 flex flex-col items-center py-6 gap-6">
+<div class="w-8 h-8 rounded-lg bg-slate-700"></div>
+<div class="w-8 h-8 rounded-lg bg-orange-600"></div>
+<div class="w-8 h-8 rounded-lg bg-slate-700"></div>
+<div class="w-8 h-8 rounded-lg bg-slate-700"></div>
+</div>
+<!-- Content Mock -->
+<div class="flex-1 p-6">
+<div class="flex justify-between items-center mb-6">
+<div class="h-6 w-32 bg-slate-200 rounded"></div>
+<div class="h-10 w-10 rounded-full bg-slate-300"></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="h-32 bg-white border border-slate-200 rounded-xl p-4">
+<div class="h-2 w-12 bg-slate-200 rounded mb-4"></div>
+<div class="h-8 w-16 bg-slate-300 rounded"></div>
+</div>
+<div class="h-32 bg-white border border-slate-200 rounded-xl p-4">
+<div class="h-2 w-12 bg-slate-200 rounded mb-4"></div>
+<div class="h-8 w-16 bg-slate-300 rounded"></div>
+</div>
+<div class="col-span-2 h-40 bg-white border border-slate-200 rounded-xl p-4">
+<div class="h-2 w-24 bg-slate-200 rounded mb-4"></div>
+<div class="space-y-3">
+<div class="h-2 w-full bg-slate-100 rounded"></div>
+<div class="h-2 w-full bg-slate-100 rounded"></div>
+<div class="h-2 w-3/4 bg-slate-100 rounded"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-white border-t border-slate-200 py-16 px-6">
+<div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
+<div class="col-span-1 md:col-span-1">
+<span class="text-xl font-bold tracking-tight text-slate-900 mb-6 block">PlaceMentor AI</span>
+<p class="text-on-surface-variant font-label-sm text-label-sm">
+                        Empowering the next generation of professionals through intelligent technology and human-centric design.
+                    </p>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 mb-6">Platform</h4>
+<ul class="space-y-4 text-on-surface-variant font-label-sm text-label-sm">
+<li><a class="hover:text-primary transition-colors" href="#">Skill Assessments</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">AI Mock Interviews</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Job Matching</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Training Modules</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 mb-6">Company</h4>
+<ul class="space-y-4 text-on-surface-variant font-label-sm text-label-sm">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Success Stories</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Partnerships</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 mb-6">Join Newsletter</h4>
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-4">Stay updated with latest career tips.</p>
+<div class="flex gap-2">
+<input class="flex-1 bg-surface rounded-lg border-outline-variant focus:ring-secondary focus:border-secondary" placeholder="Email" type="email"/>
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-button text-button">Join</button>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 text-on-surface-variant font-label-sm text-label-sm">
+<span>© 2024 PlaceMentor AI. All rights reserved.</span>
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</main>
+</body></html>

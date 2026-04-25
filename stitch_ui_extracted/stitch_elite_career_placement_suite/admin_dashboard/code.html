@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Panel - PlaceMentor AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "outline-variant": "#c6c6cd",
+                    "primary-container": "#131b2e",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#ffb690",
+                    "on-error-container": "#93000a",
+                    "surface-variant": "#d3e4fe",
+                    "on-surface-variant": "#45464d",
+                    "on-secondary-fixed-variant": "#783200",
+                    "secondary": "#9d4300",
+                    "surface-container": "#e5eeff",
+                    "outline": "#76777d",
+                    "inverse-on-surface": "#eaf1ff",
+                    "surface-container-highest": "#d3e4fe",
+                    "on-secondary": "#ffffff",
+                    "surface": "#f8f9ff",
+                    "on-tertiary-fixed": "#002113",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#dae2fd",
+                    "primary": "#000000",
+                    "on-secondary-container": "#5c2400",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "error": "#ba1a1a",
+                    "on-surface": "#0b1c30",
+                    "inverse-surface": "#213145",
+                    "background": "#f8f9ff",
+                    "surface-container-high": "#dce9ff",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "surface-tint": "#565e74",
+                    "tertiary-container": "#002113",
+                    "tertiary-fixed": "#6ffbbe",
+                    "on-primary-fixed-variant": "#3f465c",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-container-low": "#eff4ff",
+                    "surface-bright": "#f8f9ff",
+                    "on-secondary-fixed": "#341100",
+                    "on-primary-container": "#7c839b",
+                    "tertiary": "#000000",
+                    "primary-fixed-dim": "#bec6e0",
+                    "on-primary-fixed": "#131b2e",
+                    "on-background": "#0b1c30",
+                    "on-tertiary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "xs": "4px",
+                    "base-unit": "4px",
+                    "3xl": "64px",
+                    "gutter": "24px",
+                    "lg": "24px",
+                    "xl": "32px",
+                    "2xl": "48px",
+                    "md": "16px",
+                    "margin": "32px"
+            },
+            "fontFamily": {
+                    "label-sm": ["Inter"],
+                    "button": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "h2": ["Inter"],
+                    "h1": ["Inter"],
+                    "body-md": ["Inter"],
+                    "h3": ["Inter"]
+            },
+            "fontSize": {
+                    "label-sm": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                    "button": ["16px", {"lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h2": ["36px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "h1": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h3": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-bar {
+            transition: height 0.6s ease;
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-background antialiased">
+<!-- Sidebar Navigation Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-slate-900 shadow-xl border-r border-slate-800 flex flex-col h-full py-6 z-50">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-10 h-10 bg-secondary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white">link</span>
+</div>
+<div>
+<h1 class="text-lg font-black text-white leading-tight">PlaceMentor AI</h1>
+<p class="text-[10px] text-slate-400 font-bold tracking-widest uppercase">Placement Management</p>
+</div>
+</div>
+<nav class="flex-grow space-y-1">
+<!-- Active State Navigation -->
+<a class="bg-orange-600 text-white rounded-lg flex items-center gap-3 px-4 py-3 mx-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span class="font-label-sm text-label-sm">Admin Console</span>
+</a>
+<a class="text-slate-400 hover:bg-slate-800/50 hover:text-slate-100 rounded-lg flex items-center gap-3 px-4 py-3 mx-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-sm text-label-sm">Analytics</span>
+</a>
+<a class="text-slate-400 hover:bg-slate-800/50 hover:text-slate-100 rounded-lg flex items-center gap-3 px-4 py-3 mx-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-sm text-label-sm">Student Directory</span>
+</a>
+<a class="text-slate-400 hover:bg-slate-800/50 hover:text-slate-100 rounded-lg flex items-center gap-3 px-4 py-3 mx-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="business_center">business_center</span>
+<span class="font-label-sm text-label-sm">Employer Leads</span>
+</a>
+<a class="text-slate-400 hover:bg-slate-800/50 hover:text-slate-100 rounded-lg flex items-center gap-3 px-4 py-3 mx-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+<span class="font-label-sm text-label-sm">System Config</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+<div class="flex items-center gap-3 mb-3">
+<img alt="Admin Avatar" class="w-10 h-10 rounded-full border-2 border-orange-600 object-cover" data-alt="Professional portrait of a male executive in a charcoal grey suit with a confident smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJYeokwzxfIABryoY2XQJq1ycRmX7tXPwSzMfXyEeYD2DZeW1s86vj4hwm5CgkcgQWeEmAkvwYrKgeP3XkC5cznMLu6ldLZuUR0fRfbd9Dh4SZ8jUDr1Wo6VcURkALkLiygHNs89p8XOAgDda_MI-lRUTWW60624lxsrbSzTTSw6bdX9hMFe1Iv0SSYgOmuz6185Prg-c7ArkCMaSVsSonU0h96rhYBY3bPBHdGtqJ11gWh8gXlN6xJKAS4jFznh33fm0gYv-Yjz-m"/>
+<div>
+<p class="text-white font-label-sm text-label-sm">Alexander Vance</p>
+<p class="text-slate-400 text-[11px]">System Administrator</p>
+</div>
+</div>
+<button class="w-full bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-lg text-[12px] font-bold transition-colors">
+                    Sign Out
+                </button>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen p-8">
+<!-- Header Section -->
+<header class="flex justify-between items-center mb-10">
+<div>
+<h2 class="font-h2 text-h2 text-on-surface">Dashboard Overview</h2>
+<p class="font-body-md text-on-surface-variant">Real-time placement performance and student lifecycle management.</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-white border border-outline-variant px-4 py-2 rounded-xl flex items-center gap-2 font-label-sm text-label-sm text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">file_download</span>
+                    Export Report
+                </button>
+<button class="bg-secondary-container text-white px-6 py-2 rounded-xl flex items-center gap-2 font-button text-button hover:brightness-110 shadow-lg transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                    New Campaign
+                </button>
+</div>
+</header>
+<!-- Metrics Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-10">
+<!-- Metric Card 1 -->
+<div class="bg-white p-6 rounded-xl border border-outline-variant shadow-sm hover:-translate-y-1 transition-transform">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined">groups</span>
+</div>
+<span class="text-on-tertiary-container font-label-sm text-[12px] bg-tertiary-fixed/30 px-2 py-1 rounded-full">+12% vs LW</span>
+</div>
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-1">Total Students</p>
+<h3 class="font-h1 text-[32px] text-on-surface">12,842</h3>
+</div>
+<!-- Metric Card 2 -->
+<div class="bg-white p-6 rounded-xl border border-outline-variant shadow-sm hover:-translate-y-1 transition-transform">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined">school</span>
+</div>
+<span class="text-on-tertiary-container font-label-sm text-[12px] bg-tertiary-fixed/30 px-2 py-1 rounded-full">+4.2%</span>
+</div>
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-1">Placement Rate</p>
+<h3 class="font-h1 text-[32px] text-on-surface">84.6%</h3>
+</div>
+<!-- Metric Card 3 -->
+<div class="bg-white p-6 rounded-xl border border-outline-variant shadow-sm hover:-translate-y-1 transition-transform">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined">forum</span>
+</div>
+<span class="text-error font-label-sm text-[12px] bg-error-container/30 px-2 py-1 rounded-full">-2%</span>
+</div>
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-1">Active Interviews</p>
+<h3 class="font-h1 text-[32px] text-on-surface">412</h3>
+</div>
+<!-- Metric Card 4 -->
+<div class="bg-white p-6 rounded-xl border border-outline-variant shadow-sm hover:-translate-y-1 transition-transform">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 bg-surface-container rounded-lg flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined">star</span>
+</div>
+<span class="text-on-tertiary-container font-label-sm text-[12px] bg-tertiary-fixed/30 px-2 py-1 rounded-full">Record High</span>
+</div>
+<p class="text-on-surface-variant font-label-sm text-label-sm mb-1">Top Performers</p>
+<h3 class="font-h1 text-[32px] text-on-surface">2,105</h3>
+</div>
+</section>
+<!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-10">
+<!-- Placement Performance Chart -->
+<div class="lg:col-span-2 bg-white p-6 rounded-xl border border-outline-variant shadow-sm">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-h3 text-h3 text-on-surface">Placement Pipeline Trend</h3>
+<div class="flex gap-2 bg-surface-container-low p-1 rounded-lg">
+<button class="px-3 py-1 bg-white shadow-sm rounded-md text-[12px] font-bold">Weekly</button>
+<button class="px-3 py-1 text-on-surface-variant text-[12px] font-medium hover:text-on-surface">Monthly</button>
+</div>
+</div>
+<div class="h-64 flex items-end justify-between gap-4 px-2">
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-surface-container-high rounded-t-lg relative group">
+<div class="chart-bar w-full bg-primary-container rounded-t-lg" style="height: 45%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-900 text-white text-[10px] px-2 py-1 rounded transition-opacity">450</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400">MON</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-surface-container-high rounded-t-lg relative group">
+<div class="chart-bar w-full bg-primary-container rounded-t-lg" style="height: 65%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-900 text-white text-[10px] px-2 py-1 rounded transition-opacity">650</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400">TUE</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-surface-container-high rounded-t-lg relative group">
+<div class="chart-bar w-full bg-secondary-container rounded-t-lg" style="height: 85%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-900 text-white text-[10px] px-2 py-1 rounded transition-opacity">850</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400">WED</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-surface-container-high rounded-t-lg relative group">
+<div class="chart-bar w-full bg-primary-container rounded-t-lg" style="height: 55%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-900 text-white text-[10px] px-2 py-1 rounded transition-opacity">550</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400">THU</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-surface-container-high rounded-t-lg relative group">
+<div class="chart-bar w-full bg-primary-container rounded-t-lg" style="height: 75%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-900 text-white text-[10px] px-2 py-1 rounded transition-opacity">750</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400">FRI</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-surface-container-high rounded-t-lg relative group">
+<div class="chart-bar w-full bg-primary-container rounded-t-lg" style="height: 35%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-900 text-white text-[10px] px-2 py-1 rounded transition-opacity">350</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400">SAT</span>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2">
+<div class="w-full bg-surface-container-high rounded-t-lg relative group">
+<div class="chart-bar w-full bg-primary-container rounded-t-lg" style="height: 25%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 bg-slate-900 text-white text-[10px] px-2 py-1 rounded transition-opacity">250</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400">SUN</span>
+</div>
+</div>
+</div>
+<!-- Top Performers List -->
+<div class="bg-white p-6 rounded-xl border border-outline-variant shadow-sm">
+<h3 class="font-h3 text-h3 text-on-surface mb-6">Top Candidates</h3>
+<div class="space-y-5">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Close up portrait of a smiling young woman with dark hair against a soft urban background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXjsBUuhLWpdcMxgC1LuzxN5hYJIn5IqIO9roUu7d4-y3xekm7PkRy7hNQQaxOk7gI4_D3Gxywgu0G16CAo8iS1Kem_jjNa-U5XmATIrDOnWLKbRuixsZN0GrBM3ZSFDOX3X2BmMVNwfVjxdl80Y9VgdJuhR6UMCRvsPKKX2AXuUmB6ux5y8IX384KmYq9BeopSLFkI45nBVUuXBLIr_lIA-AZplGRfIcYNtMQIZaLs7eMkYO3oFDHqZQcfE0f6LjlVFCN5kftM5Se"/>
+<div class="flex-grow">
+<p class="font-label-sm text-label-sm text-on-surface">Elena Rodriguez</p>
+<p class="text-[12px] text-on-surface-variant">Full-Stack Engineering</p>
+</div>
+<div class="text-right">
+<span class="text-tertiary font-bold text-[14px]">98%</span>
+<p class="text-[10px] text-slate-400 uppercase font-black">Score</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Mid-shot of a professional man in glasses looking thoughtfully at the camera in a modern office" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXQNnetiVjj0HpjgGjgjoGhFcLYZhn_uOrd_K_2yPddwJhiwSeqWLfiNzA8DSk_qWLC-XFjGK04Nm8w3H1KkV0ZVRIwUZiJSE0XYWLii2j7tUTMhVPQtIE8ml-g1UJVXMqpBqiHR0FkPi9-12iHZyxY4aYWHKC3p-O_dyWhYlx3lsNjlr8-NwlQfdlS2Fyfz7jezrQdQLKACrRNQoMO3HFtc4xn-HTEpGzIxeCbJXqV91S32xh8PZsuCFfRJ4XI_GTIayRAQ_aQNuj"/>
+<div class="flex-grow">
+<p class="font-label-sm text-label-sm text-on-surface">James Chen</p>
+<p class="text-[12px] text-on-surface-variant">Data Science Lead</p>
+</div>
+<div class="text-right">
+<span class="text-tertiary font-bold text-[14px]">96%</span>
+<p class="text-[10px] text-slate-400 uppercase font-black">Score</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A confident professional woman of African descent in a navy blue blazer standing in a bright lobby" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCj80w_EV5KIlDKdyn3mnKBrjUUlIxvuD9z9pLITZNLfjpd5IviNUEpcUtS1QgIlyz_S4zlDcnpYtF5rqa8Ky42eLCFYqZsKBqDU7ZTS9QTMlp09vYteM9QgHoF98OZwAs-yHylYLSXL9poSxmQ5xujWc_oYgG1ocjRssvl4IqHr34mVJLyWXkzmj5qcMqYdFNKWTQMF4sD4eqPt2tw3daMRpKOEk6VLkiZxH8JINz2a0Vaewi3DL4GAJiaXTjXRtWZ1Y_tjypoDXp_"/>
+<div class="flex-grow">
+<p class="font-label-sm text-label-sm text-on-surface">Sarah Okoro</p>
+<p class="text-[12px] text-on-surface-variant">Product Management</p>
+</div>
+<div class="text-right">
+<span class="text-tertiary font-bold text-[14px]">95%</span>
+<p class="text-[10px] text-slate-400 uppercase font-black">Score</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-3 border-2 border-dashed border-outline-variant rounded-xl text-on-surface-variant font-label-sm text-label-sm hover:border-primary-container hover:text-primary-container transition-all">
+                    View All Performers
+                </button>
+</div>
+</div>
+<!-- Student Directory Table -->
+<section class="bg-white rounded-xl border border-outline-variant shadow-sm overflow-hidden">
+<div class="px-6 py-5 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-h3 text-h3 text-on-surface">Student Directory</h3>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-lg text-sm focus:ring-2 focus:ring-primary-container w-64" placeholder="Search by name, email, or skill..." type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-6 py-4 font-bold text-on-surface-variant text-[12px] uppercase tracking-wider">Student Name</th>
+<th class="px-6 py-4 font-bold text-on-surface-variant text-[12px] uppercase tracking-wider">Registration Status</th>
+<th class="px-6 py-4 font-bold text-on-surface-variant text-[12px] uppercase tracking-wider">Last Login</th>
+<th class="px-6 py-4 font-bold text-on-surface-variant text-[12px] uppercase tracking-wider">Assessment Score</th>
+<th class="px-6 py-4 font-bold text-on-surface-variant text-[12px] uppercase tracking-wider">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100">
+<!-- Table Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary-fixed rounded-full flex items-center justify-center font-bold text-primary-container text-xs">MA</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface">Marcus Aurelius</p>
+<p class="text-[12px] text-outline">marcus.a@unidomain.edu</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-tertiary-fixed/30 text-on-tertiary-fixed-variant text-[11px] font-bold rounded-full">Completed</span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant text-sm">2 hours ago</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container" style="width: 88%;"></div>
+</div>
+<span class="font-bold text-on-surface text-sm">88%</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<button class="p-1 hover:bg-surface-container rounded-md text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-surface-container rounded-full flex items-center justify-center font-bold text-on-surface-variant text-xs">SP</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface">Sophia Patel</p>
+<p class="text-[12px] text-outline">s.patel@tech.edu</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-surface-container text-on-surface-variant text-[11px] font-bold rounded-full">Pending Docs</span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant text-sm">Yesterday</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-primary-container" style="width: 72%;"></div>
+</div>
+<span class="font-bold text-on-surface text-sm">72%</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<button class="p-1 hover:bg-surface-container rounded-md text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-error-container/30 rounded-full flex items-center justify-center font-bold text-error text-xs">DM</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface">David Miller</p>
+<p class="text-[12px] text-outline">d.miller@state.edu</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-error-container/40 text-on-error-container text-[11px] font-bold rounded-full">Flagged</span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant text-sm">3 days ago</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-error" style="width: 45%;"></div>
+</div>
+<span class="font-bold text-on-surface text-sm">45%</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<button class="p-1 hover:bg-surface-container rounded-md text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 4 -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary-fixed rounded-full flex items-center justify-center font-bold text-primary-container text-xs">LK</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface">Linda Kim</p>
+<p class="text-[12px] text-outline">linda.k@global.edu</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-tertiary-fixed/30 text-on-tertiary-fixed-variant text-[11px] font-bold rounded-full">Completed</span>
+</td>
+<td class="px-6 py-4 text-on-surface-variant text-sm">4 hours ago</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-24 h-2 bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container" style="width: 94%;"></div>
+</div>
+<span class="font-bold text-on-surface text-sm">94%</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<button class="p-1 hover:bg-surface-container rounded-md text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-4 bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
+<p class="text-on-surface-variant text-sm">Showing <span class="font-bold">1 - 10</span> of 12,842 students</p>
+<div class="flex gap-2">
+<button class="px-3 py-1 border border-outline-variant rounded-md bg-white text-on-surface-variant hover:bg-surface-container transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="px-3 py-1 border border-outline-variant rounded-md bg-white text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Contextual FAB - Restricted to Dashboard -->
+<button class="fixed bottom-8 right-8 w-16 h-16 bg-slate-900 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50 group">
+<span class="material-symbols-outlined text-[28px]" data-weight="fill">bolt</span>
+<span class="absolute right-20 bg-slate-900 text-white px-4 py-2 rounded-lg text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-xl">Run AI Matching Engine</span>
+</button>
+</body></html>
