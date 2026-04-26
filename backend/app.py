@@ -339,7 +339,12 @@ def register_routes(app, db):
             sys.path.insert(0, root)
             from model_ollama import generate_questions
             raw_questions = generate_questions(domain, difficulty)
-            questions = raw_questions[:15]
+            # Normalize: LLM may return [{"question": "..."}] instead of ["..."]
+            def extract_q(q):
+                if isinstance(q, dict):
+                    return q.get("question") or q.get("text") or str(q)
+                return str(q)
+            questions = [extract_q(q) for q in raw_questions if q][:15]
         except Exception:
             questions = [
                 f"Explain the core concepts of {domain}.",
@@ -401,7 +406,7 @@ def register_routes(app, db):
             print(f"[DEBUG] Evaluation failed: {e}")
             import traceback
             traceback.print_exc()
-            score = 0.5 if len(user_answer.strip()) > 20 else 0.2
+            score = 5.0 if len(user_answer.strip()) > 20 else 2.0
             evaluation = {"correct_answer": "Refer to documentation.", "score": score, "feedback": "Answer recorded.", "explanation": "Saved for review."}
 
         answer_record = {
@@ -436,7 +441,8 @@ def register_routes(app, db):
             return jsonify({"error": "Interview not found"}), 404
 
         answers = interview.get("answers", [])
-        total_score = sum(a.get("score", 0) for a in answers) / max(len(answers), 1) * 100
+        # Each answer score is 0-10. Average it, then multiply by 10 to get percentage (0-100)
+        total_score = (sum(a.get("score", 0) for a in answers) / max(len(answers), 1)) * 10
         avg = total_score / 100
 
         metrics = {

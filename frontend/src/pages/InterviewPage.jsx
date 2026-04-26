@@ -65,6 +65,18 @@ export default function InterviewPage() {
     synthRef.current.speak(utterance);
   };
 
+  // Use a ref to track listening state for the onend closure (avoids stale state)
+  const isListeningRef = useRef(false);
+
+  const stopListening = () => {
+    isListeningRef.current = false;
+    if (recognitionRef.current) {
+      try { recognitionRef.current.abort(); } catch (e) {}
+      recognitionRef.current = null;
+    }
+    setIsListening(false);
+  };
+
   const toggleListening = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
@@ -72,16 +84,18 @@ export default function InterviewPage() {
       return;
     }
     
-    if (isListening) {
-      if (recognitionRef.current) {
-        try { recognitionRef.current.stop(); } catch (e) {}
-      }
-      setIsListening(false);
+    if (isListeningRef.current) {
+      stopListening();
     } else {
-      // Re-create the recognition instance to prevent "already started" errors
+      // Kill any previous instance first
+      if (recognitionRef.current) {
+        try { recognitionRef.current.abort(); } catch (e) {}
+        recognitionRef.current = null;
+      }
+
       const recognition = new SpeechRecognition();
       recognition.continuous = true;
-      recognition.interimResults = true;
+      recognition.interimResults = false; // Only final results — prevents duplicates
       recognition.lang = 'en-US';
 
       recognition.onresult = (event) => {
@@ -101,38 +115,64 @@ export default function InterviewPage() {
 
       recognition.onerror = (event) => {
         console.error("Mic error:", event.error);
-        setIsListening(false);
+        if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+          alert("Microphone access denied. Please allow microphone permission in your browser.");
+          stopListening();
+        }
+        // no-speech, network etc. — just log, onend will handle restart
       };
 
       recognition.onend = () => {
-        setIsListening(false);
+        // Only restart if we're still supposed to be listening (checked via ref, not state)
+        if (isListeningRef.current) {
+          try {
+            recognition.start();
+          } catch (e) {
+            console.error("Mic restart failed:", e);
+            stopListening();
+          }
+        } else {
+          setIsListening(false);
+        }
       };
 
       recognitionRef.current = recognition;
 
       try {
         recognition.start();
+        isListeningRef.current = true;
         setIsListening(true);
       } catch (err) {
         console.error("Mic start error:", err);
         alert("Failed to start microphone. Please check permissions.");
-        setIsListening(false);
+        stopListening();
       }
     }
+  };
+
+  // Helper: safely extract string from a question that may be an object or string
+  const getQuestionText = (q) => {
+    if (!q) return '';
+    if (typeof q === 'string') return q;
+    if (typeof q === 'object') return q.question || q.text || JSON.stringify(q);
+    return String(q);
   };
 
   const startInterview = async () => {
     setLoading(true);
     try {
       const res = await api.post('/interview/start', { domain, difficulty });
+      // Normalize questions: LLM may return [{"question": "..."}] or ["..."]
+      const rawQuestions = res.data.questions || [];
+      const normalizedQuestions = rawQuestions.map(q => getQuestionText(q)).filter(q => q.trim());
       setInterviewId(res.data.interview_id);
-      setQuestions(res.data.questions);
+      setQuestions(normalizedQuestions);
       setCurrentQ(0);
       setPhase('interview');
       setTranscript([]);
       // Read first question aloud
-      setTimeout(() => speakText(res.data.questions[0]), 500);
-      setTranscript(prev => [...prev, { role: 'ai', text: res.data.questions[0] }]);
+      setTimeout(() => speakText(normalizedQuestions[0]), 500);
+      setTranscript(prev => [...prev, { role: 'ai', text: normalizedQuestions[0] }]);
     } catch (err) {
       alert('Failed to start interview. Please try again.');
     } finally { setLoading(false); }
@@ -140,6 +180,10 @@ export default function InterviewPage() {
 
   const submitAnswer = async () => {
     if (!userAnswer.trim()) return;
+    
+    // STOP mic before submitting — prevents ghost audio from bleeding in
+    stopListening();
+    
     setLoading(true);
     setFeedback(null);
     
@@ -156,7 +200,7 @@ export default function InterviewPage() {
       
       setFeedback(res.data);
       setAnsweredCount(prev => prev + 1);
-      setTranscript(prev => [...prev, { role: 'feedback', text: `Score: ${(res.data.score * 100).toFixed(0)}% - ${res.data.feedback}` }]);
+      setTranscript(prev => [...prev, { role: 'feedback', text: `Score: ${res.data.score.toFixed(1)}/10 — ${res.data.feedback}` }]);
     } catch (err) {
       alert('Failed to submit answer');
     } finally { setLoading(false); }
@@ -164,8 +208,11 @@ export default function InterviewPage() {
 
   const nextQuestion = () => {
     if (currentQ < questions.length - 1) {
+      // STOP mic before switching questions — prevents old audio from bleeding into new answer
+      stopListening();
+      
       setCurrentQ(prev => prev + 1);
-      setUserAnswer('');
+      setUserAnswer('');  // Clear answer AFTER mic is fully stopped
       setFeedback(null);
       const nextQ = questions[currentQ + 1];
       speakText(nextQ);
@@ -174,6 +221,7 @@ export default function InterviewPage() {
   };
 
   const endInterview = async () => {
+    stopListening();
     setPhase('submitting');
     try {
       const res = await api.post('/interview/complete', { interview_id: interviewId });
@@ -355,9 +403,9 @@ export default function InterviewPage() {
 
             {/* Feedback */}
             {feedback && (
-              <div className={`mt-4 p-5 rounded-xl border ${feedback.score >= 0.7 ? 'bg-green-50 border-green-200' : feedback.score >= 0.4 ? 'bg-orange-50 border-orange-200' : 'bg-red-50 border-red-200'}`}>
+              <div className={`mt-4 p-5 rounded-xl border ${feedback.score >= 7.0 ? 'bg-green-50 border-green-200' : feedback.score >= 4.0 ? 'bg-orange-50 border-orange-200' : 'bg-red-50 border-red-200'}`}>
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="font-bold text-sm">Score: {(feedback.score * 100).toFixed(0)}%</span>
+                  <span className="font-bold text-sm">Score: {feedback.score.toFixed(1)} / 10 ({(feedback.score * 10).toFixed(0)}%)</span>
                 </div>
                 <p className="text-sm text-on-surface-variant">{feedback.feedback}</p>
                 {feedback.correct_answer && <p className="text-sm mt-2"><span className="font-medium">Ideal Answer:</span> {feedback.correct_answer}</p>}
