@@ -80,7 +80,7 @@ export default function Dashboard() {
             <p className="text-on-surface-variant mt-1 font-body-md">Track your progress and enhance your skills.</p>
           </div>
           <div className="flex items-center gap-4">
-            <button className="p-2.5 bg-white rounded-xl shadow-sm border border-outline-variant/30 hover:shadow-md transition-all">
+            <button onClick={() => alert('No new notifications at this time.')} className="p-2.5 bg-white rounded-xl shadow-sm border border-outline-variant/30 hover:shadow-md transition-all">
               <span className="material-symbols-outlined text-on-surface-variant">notifications</span>
             </button>
             <div className="w-10 h-10 bg-primary-container rounded-full flex items-center justify-center text-white font-bold">
@@ -149,7 +149,7 @@ export default function Dashboard() {
                 <span className="material-symbols-outlined">quiz</span>
                 <span className="font-medium">Take Aptitude Test</span>
               </button>
-              <button className="w-full flex items-center gap-3 p-4 bg-surface-container text-on-surface rounded-xl hover:bg-surface-container-high transition-all active:scale-[0.98]">
+              <button onClick={() => alert('Profile settings feature coming soon!')} className="w-full flex items-center gap-3 p-4 bg-surface-container text-on-surface rounded-xl hover:bg-surface-container-high transition-all active:scale-[0.98]">
                 <span className="material-symbols-outlined">person</span>
                 <span className="font-medium">View Profile</span>
               </button>

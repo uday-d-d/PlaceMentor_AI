@@ -1,8 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
 
   return (
     <div className="bg-background text-on-background font-body-md selection:bg-secondary-container selection:text-on-secondary-container">
@@ -18,13 +20,24 @@ export default function LandingPage() {
             </nav>
           </div>
           <div className="flex items-center gap-4">
-            <div className="hidden sm:flex gap-4">
-              <button onClick={() => navigate('/login')} className="font-inter text-sm font-medium text-slate-500 hover:text-slate-900 transition-all active:scale-95">Login</button>
-              <button onClick={() => navigate('/register')} className="font-inter text-sm font-medium text-slate-500 hover:text-slate-900 transition-all active:scale-95">Register</button>
-            </div>
-            <button onClick={() => navigate('/register')} className="bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-button shadow-md hover:brightness-110 active:scale-95 transition-all">
-              Get Started
-            </button>
+            {isAuthenticated ? (
+              <>
+                <button onClick={() => { logout(); navigate('/'); }} className="font-inter text-sm font-medium text-slate-500 hover:text-slate-900 transition-all active:scale-95">Logout</button>
+                <button onClick={() => navigate('/dashboard')} className="bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-button shadow-md hover:brightness-110 active:scale-95 transition-all">
+                  Go to Dashboard
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="hidden sm:flex gap-4">
+                  <button onClick={() => navigate('/login')} className="font-inter text-sm font-medium text-slate-500 hover:text-slate-900 transition-all active:scale-95">Login</button>
+                  <button onClick={() => navigate('/register')} className="font-inter text-sm font-medium text-slate-500 hover:text-slate-900 transition-all active:scale-95">Register</button>
+                </div>
+                <button onClick={() => navigate('/register')} className="bg-primary text-on-primary px-5 py-2.5 rounded-lg font-button text-button shadow-md hover:brightness-110 active:scale-95 transition-all">
+                  Get Started
+                </button>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -45,10 +58,16 @@ export default function LandingPage() {
                 PlaceMentor AI uses advanced AI to simulate realistic interviews, test your aptitude, and connect you with high-growth placement opportunities.
               </p>
               <div className="flex flex-wrap gap-4">
-                <button onClick={() => navigate('/register')} className="bg-secondary text-on-secondary px-8 py-4 rounded-xl font-button text-button shadow-lg shadow-secondary/20 hover:-translate-y-1 transition-all active:scale-95">
-                  Get Started Now
-                </button>
-                <button className="flex items-center gap-2 bg-white border border-outline-variant px-8 py-4 rounded-xl font-button text-button text-on-surface hover:bg-surface-container transition-all active:scale-95">
+                {isAuthenticated ? (
+                  <button onClick={() => navigate('/dashboard')} className="bg-secondary text-on-secondary px-8 py-4 rounded-xl font-button text-button shadow-lg shadow-secondary/20 hover:-translate-y-1 transition-all active:scale-95">
+                    Go to Dashboard
+                  </button>
+                ) : (
+                  <button onClick={() => navigate('/register')} className="bg-secondary text-on-secondary px-8 py-4 rounded-xl font-button text-button shadow-lg shadow-secondary/20 hover:-translate-y-1 transition-all active:scale-95">
+                    Get Started Now
+                  </button>
+                )}
+                <button onClick={() => alert('Demo video coming soon!')} className="flex items-center gap-2 bg-white border border-outline-variant px-8 py-4 rounded-xl font-button text-button text-on-surface hover:bg-surface-container transition-all active:scale-95">
                   <span className="material-symbols-outlined">play_circle</span>
                   Watch Demo
                 </button>
@@ -143,7 +162,7 @@ export default function LandingPage() {
                   <p className="text-on-surface-variant font-body-md">
                     Our algorithm matches your potential with roles where you'll thrive most.
                   </p>
-                  <button className="mt-6 flex items-center gap-2 text-secondary font-button font-bold group-hover:gap-4 transition-all">
+                  <button onClick={() => alert('Placement exploration feature is under development.')} className="mt-6 flex items-center gap-2 text-secondary font-button font-bold group-hover:gap-4 transition-all">
                     Explore Placements <span className="material-symbols-outlined">arrow_forward</span>
                   </button>
                 </div>
@@ -175,7 +194,7 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <button onClick={() => navigate('/register')} className="bg-white text-primary-container px-8 py-4 rounded-xl font-button text-button hover:bg-slate-100 transition-all active:scale-95">
+                <button onClick={() => isAuthenticated ? navigate('/dashboard') : navigate('/register')} className="bg-white text-primary-container px-8 py-4 rounded-xl font-button text-button hover:bg-slate-100 transition-all active:scale-95">
                   Launch Student Portal
                 </button>
               </div>

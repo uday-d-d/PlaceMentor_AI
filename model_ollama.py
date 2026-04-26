@@ -19,7 +19,7 @@ Responsibilities:
 2. Evaluate answers fairly.
 3. Give constructive feedback.
 
-Always follow the exact response format.
+Always follow the exact response format. DO NOT use markdown formatting like asterisks (**) in the labels.
 """
 
 # ----------------------------
@@ -83,7 +83,7 @@ def evaluate_answer(domain, difficulty, question, user_answer):
 
     Evaluate the answer.
 
-    Return EXACT format:
+    Return EXACT format (DO NOT USE MARKDOWN ASTERISKS AROUND LABELS):
 
     CORRECT_ANSWER: <ideal answer>
     SCORE: <0.0 to 1.0>
@@ -115,27 +115,38 @@ def parse_response(text):
     }
 
     current = None
+    import re
 
     for line in text.splitlines():
+        clean_line = line.strip().replace("**", "").replace("*", "")
 
-        if line.startswith("CORRECT_ANSWER:"):
+        if clean_line.startswith("CORRECT_ANSWER:"):
             current = "correct_answer"
-            result[current] = line.replace("CORRECT_ANSWER:", "").strip()
+            result[current] = clean_line.replace("CORRECT_ANSWER:", "").strip()
 
-        elif line.startswith("SCORE:"):
+        elif clean_line.startswith("SCORE:"):
             current = "score"
+            score_str = clean_line.replace("SCORE:", "").strip()
             try:
-                result[current] = float(line.replace("SCORE:", "").strip())
+                match = re.search(r"(\d+(\.\d+)?)", score_str)
+                if match:
+                    # In case the model returns 8/10 or something, we cap at 1.0 if it's supposed to be 0 to 1.0.
+                    # Usually it's 0.0 to 1.0. Let's just extract the first float.
+                    val = float(match.group(1))
+                    if val > 1.0: val = val / 10.0 # simple heuristic
+                    result[current] = val
+                else:
+                    result[current] = 0.0
             except:
                 result[current] = 0.0
 
-        elif line.startswith("FEEDBACK:"):
+        elif clean_line.startswith("FEEDBACK:"):
             current = "feedback"
-            result[current] = line.replace("FEEDBACK:", "").strip()
+            result[current] = clean_line.replace("FEEDBACK:", "").strip()
 
-        elif line.startswith("EXPLANATION:"):
+        elif clean_line.startswith("EXPLANATION:"):
             current = "explanation"
-            result[current] = line.replace("EXPLANATION:", "").strip()
+            result[current] = clean_line.replace("EXPLANATION:", "").strip()
 
         elif current and current != "score":
             result[current] += " " + line.strip()
