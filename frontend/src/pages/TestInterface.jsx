@@ -47,7 +47,7 @@ export default function TestInterface() {
       domain,
       difficulty,
       answers: Object.entries(answers).map(([idx, ans]) => ({
-        question_index: parseInt(idx),
+        question: questions[parseInt(idx)]?.question || '',
         selected_answer: ans
       }))
     };

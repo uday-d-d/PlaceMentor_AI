@@ -258,10 +258,13 @@ def register_routes(app, db):
         correct_count = 0
         results = []
         for ans in answers:
-            q_idx = ans.get("question_index", 0)
+            q_text = ans.get("question", "")
             selected = ans.get("selected_answer", "")
-            if q_idx < len(questions):
-                q = questions[q_idx]
+            
+            # Find the actual question in the bank
+            q = next((x for x in questions if x["question"] == q_text), None)
+            
+            if q:
                 is_correct = selected == q["correct_answer"]
                 if is_correct:
                     correct_count += 1
