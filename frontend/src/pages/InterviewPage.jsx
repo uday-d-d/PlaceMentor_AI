@@ -89,14 +89,24 @@ export default function InterviewPage() {
   };
 
   const toggleListening = () => {
-    if (!recognitionRef.current) return;
+    if (!recognitionRef.current) {
+      alert("Speech Recognition is not supported in this browser. Please use Google Chrome or type your answer.");
+      return;
+    }
+    
     if (isListening) {
-      recognitionRef.current.stop();
+      try { recognitionRef.current.stop(); } catch (e) {}
       setIsListening(false);
     } else {
       setUserAnswer('');
-      recognitionRef.current.start();
-      setIsListening(true);
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch (err) {
+        console.error("Mic error:", err);
+        alert("Failed to start microphone. Please check permissions.");
+        setIsListening(false);
+      }
     }
   };
 

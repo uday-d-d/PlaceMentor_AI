@@ -117,6 +117,8 @@ def parse_response(text):
     current = None
     import re
 
+    print(f"\n[DEBUG] Raw LLM Response:\n{text}\n")
+
     for line in text.splitlines():
         clean_line = line.strip().replace("**", "").replace("*", "")
 
@@ -133,7 +135,8 @@ def parse_response(text):
                     # In case the model returns 8/10 or something, we cap at 1.0 if it's supposed to be 0 to 1.0.
                     # Usually it's 0.0 to 1.0. Let's just extract the first float.
                     val = float(match.group(1))
-                    if val > 1.0: val = val / 10.0 # simple heuristic
+                    while val > 1.0: 
+                        val = val / 10.0
                     result[current] = val
                 else:
                     result[current] = 0.0

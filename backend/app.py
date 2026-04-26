@@ -397,7 +397,10 @@ def register_routes(app, db):
             sys.path.insert(0, root)
             from model_ollama import evaluate_answer
             evaluation = evaluate_answer(interview.get("domain", "Python"), interview.get("difficulty", "intermediate"), question, user_answer)
-        except Exception:
+        except Exception as e:
+            print(f"[DEBUG] Evaluation failed: {e}")
+            import traceback
+            traceback.print_exc()
             score = 0.5 if len(user_answer.strip()) > 20 else 0.2
             evaluation = {"correct_answer": "Refer to documentation.", "score": score, "feedback": "Answer recorded.", "explanation": "Saved for review."}
 
