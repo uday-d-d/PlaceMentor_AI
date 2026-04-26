@@ -37,9 +37,11 @@ def safe_completion(messages, retries=3, delay=1):
     for attempt in range(retries):
         try:
             response = client.chat.completions.create(
-                model=MODEL_NAME,
-                messages=messages
-            )
+    model=MODEL_NAME,
+    messages=messages,
+    temperature=0.7,   # 🔥 controls randomness (0 = same, 1 = creative)
+    top_p=0.9          # sampling diversity
+)
             return response
 
         except Exception as e:
