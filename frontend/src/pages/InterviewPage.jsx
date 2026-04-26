@@ -27,30 +27,7 @@ export default function InterviewPage() {
   const recognitionRef = useRef(null);
   const synthRef = useRef(window.speechSynthesis);
 
-  // Initialize Web Speech API
-  useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-      const recognition = new SpeechRecognition();
-      recognition.continuous = true;
-      recognition.interimResults = true;
-      recognition.lang = 'en-US';
-      recognition.onresult = (event) => {
-        let finalTranscript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          if (event.results[i].isFinal) {
-            finalTranscript += event.results[i][0].transcript;
-          }
-        }
-        if (finalTranscript) {
-          setUserAnswer(prev => prev + ' ' + finalTranscript);
-        }
-      };
-      recognition.onerror = () => setIsListening(false);
-      recognition.onend = () => setIsListening(false);
-      recognitionRef.current = recognition;
-    }
-  }, []);
+  // Web Speech API will be initialized dynamically on click to prevent restart bugs.
 
   // Tab switching detection
   useEffect(() => {
@@ -89,21 +66,55 @@ export default function InterviewPage() {
   };
 
   const toggleListening = () => {
-    if (!recognitionRef.current) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
       alert("Speech Recognition is not supported in this browser. Please use Google Chrome or type your answer.");
       return;
     }
     
     if (isListening) {
-      try { recognitionRef.current.stop(); } catch (e) {}
+      if (recognitionRef.current) {
+        try { recognitionRef.current.stop(); } catch (e) {}
+      }
       setIsListening(false);
     } else {
-      setUserAnswer('');
+      // Re-create the recognition instance to prevent "already started" errors
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event) => {
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          }
+        }
+        if (finalTranscript) {
+          setUserAnswer(prev => {
+            const separator = prev && !prev.endsWith(' ') ? ' ' : '';
+            return prev + separator + finalTranscript.trim();
+          });
+        }
+      };
+
+      recognition.onerror = (event) => {
+        console.error("Mic error:", event.error);
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current = recognition;
+
       try {
-        recognitionRef.current.start();
+        recognition.start();
         setIsListening(true);
       } catch (err) {
-        console.error("Mic error:", err);
+        console.error("Mic start error:", err);
         alert("Failed to start microphone. Please check permissions.");
         setIsListening(false);
       }

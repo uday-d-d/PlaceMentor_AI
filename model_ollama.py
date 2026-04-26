@@ -1,5 +1,8 @@
 from openai import OpenAI
 import random
+import json
+import time
+import re
 
 # ----------------------------
 # Connect to Ollama (Local)
@@ -19,11 +22,35 @@ Responsibilities:
 2. Evaluate answers fairly.
 3. Give constructive feedback.
 
-Always follow the exact response format. DO NOT use markdown formatting like asterisks (**) in the labels.
+STRICT RULES:
+- Always return valid JSON
+- No markdown
+- No extra explanation outside JSON
+- If format is wrong, response will be rejected
 """
 
 # ----------------------------
-# Generate Multiple Questions
+# Safe Completion (Retry Logic)
+# ----------------------------
+def safe_completion(messages, retries=3, delay=1):
+
+    for attempt in range(retries):
+        try:
+            response = client.chat.completions.create(
+                model=MODEL_NAME,
+                messages=messages
+            )
+            return response
+
+        except Exception as e:
+            print(f"⚠️ Attempt {attempt+1} failed:", e)
+            time.sleep(delay)
+
+    raise Exception("❌ LLM failed after retries")
+
+
+# ----------------------------
+# Generate Questions (JSON)
 # ----------------------------
 def generate_questions(domain, difficulty, count=None):
 
@@ -34,135 +61,146 @@ def generate_questions(domain, difficulty, count=None):
     Domain: {domain}
     Difficulty: {difficulty}
 
-    Generate {count} different interview questions.
+    Generate {count} technical interview questions.
 
-    Rules:
-    - Questions must be technical
-    - Avoid repetition
-    - Questions should test understanding
-
-    Return questions in numbered list format.
+    Return ONLY JSON array.
+    Example:
+    ["Q1", "Q2", "Q3"]
     """
 
-    response = client.chat.completions.create(
-        model=MODEL_NAME,
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": prompt}
-        ]
-    )
+    response = safe_completion([
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": prompt}
+    ])
 
     text = response.choices[0].message.content.strip()
+
+    try:
+        questions = json.loads(text)
+        return questions
+
+    except:
+        print("⚠️ JSON parsing failed, using fallback...")
+        return fallback_question_parser(text)
+
+
+# ----------------------------
+# Fallback Parser (Backup)
+# ----------------------------
+def fallback_question_parser(text):
 
     questions = []
 
     for line in text.split("\n"):
         line = line.strip()
 
-        if line and (line[0].isdigit() or line.startswith("-")):
-            question = line.split(".", 1)[-1].strip()
-            questions.append(question)
+        if not line:
+            continue
+
+        # Handle formats like "1. ..." or "1) ..."
+        match = re.match(r"^\d+[\.\)]\s*(.*)", line)
+        if match:
+            questions.append(match.group(1))
+        else:
+            questions.append(line)
 
     return questions
 
 
 # ----------------------------
-# Evaluate Student Answer
+# Batch Answer Evaluation
 # ----------------------------
-def evaluate_answer(domain, difficulty, question, user_answer):
+def evaluate_answers_batch(domain, difficulty, qa_list):
 
     prompt = f"""
     Domain: {domain}
     Difficulty: {difficulty}
 
-    Question:
-    {question}
+    Evaluate the following answers.
 
-    Student Answer:
-    {user_answer}
+    Return ONLY JSON array in this format:
 
-    Evaluate the answer.
+    [
+      {{
+        "question": "...",
+        "correct_answer": "...",
+        "score": 0.0,
+        "feedback": "...",
+        "explanation": "..."
+      }}
+    ]
 
-    Return EXACT format (DO NOT USE MARKDOWN ASTERISKS AROUND LABELS):
-
-    CORRECT_ANSWER: <ideal answer>
-    SCORE: <0.0 to 1.0>
-    FEEDBACK: <short feedback>
-    EXPLANATION: <what is right and wrong>
+    Data:
+    {json.dumps(qa_list, indent=2)}
     """
 
-    response = client.chat.completions.create(
-        model=MODEL_NAME,
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": prompt}
-        ]
-    )
+    response = safe_completion([
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": prompt}
+    ])
 
-    return parse_response(response.choices[0].message.content)
+    text = response.choices[0].message.content.strip()
+
+    try:
+        return json.loads(text)
+
+    except:
+        print("⚠️ JSON parsing failed, using fallback...")
+        return fallback_evaluation_parser(text)
 
 
 # ----------------------------
-# Parse Model Response
+# Fallback Evaluation Parser
 # ----------------------------
-def parse_response(text):
+def fallback_evaluation_parser(text):
 
-    result = {
-        "correct_answer": "",
-        "score": 0.0,
-        "feedback": "",
-        "explanation": ""
-    }
-
-    current = None
-    import re
-
-    print(f"\n[DEBUG] Raw LLM Response:\n{text}\n")
+    results = []
+    current = {}
 
     for line in text.splitlines():
-        clean_line = line.strip().replace("**", "").replace("*", "")
+        clean = line.strip().replace("**", "").replace("*", "")
 
-        if clean_line.startswith("CORRECT_ANSWER:"):
-            current = "correct_answer"
-            result[current] = clean_line.replace("CORRECT_ANSWER:", "").strip()
+        if "question" in clean.lower():
+            if current:
+                results.append(current)
+                current = {}
+            current["question"] = clean.split(":", 1)[-1].strip()
 
-        elif clean_line.startswith("SCORE:"):
-            current = "score"
-            score_str = clean_line.replace("SCORE:", "").strip()
-            try:
-                match = re.search(r"(\d+(\.\d+)?)", score_str)
-                if match:
-                    # In case the model returns 8/10 or something, we cap at 1.0 if it's supposed to be 0 to 1.0.
-                    # Usually it's 0.0 to 1.0. Let's just extract the first float.
-                    val = float(match.group(1))
-                    while val > 1.0: 
-                        val = val / 10.0
-                    result[current] = val
-                else:
-                    result[current] = 0.0
-            except:
-                result[current] = 0.0
+        elif "correct" in clean.lower():
+            current["correct_answer"] = clean.split(":", 1)[-1].strip()
 
-        elif clean_line.startswith("FEEDBACK:"):
-            current = "feedback"
-            result[current] = clean_line.replace("FEEDBACK:", "").strip()
+        elif "score" in clean.lower():
+            match = re.search(r"(\d+(\.\d+)?)", clean)
+            if match:
+                val = float(match.group(1))
+                while val > 1.0:
+                    val /= 10.0
+                current["score"] = val
 
-        elif clean_line.startswith("EXPLANATION:"):
-            current = "explanation"
-            result[current] = clean_line.replace("EXPLANATION:", "").strip()
+        elif "feedback" in clean.lower():
+            current["feedback"] = clean.split(":", 1)[-1].strip()
 
-        elif current and current != "score":
-            result[current] += " " + line.strip()
+        elif "explanation" in clean.lower():
+            current["explanation"] = clean.split(":", 1)[-1].strip()
 
-    return result
+    if current:
+        results.append(current)
+
+    return results
 
 
 # ----------------------------
-# Example CLI Testing
+# CLI Testing
 # ----------------------------
 def main():
 
-    print("\n🎯 AI Interviewer (Phi3 + Ollama)\n")
+    print("\n🎯 AI Interviewer (Phi3 + Ollama Advanced)\n")
+
+    try:
+        client.models.list()
+    except Exception as e:
+        print("❌ Ollama not running:", e)
+        return
 
     domain = input("Enter domain (Python/Web/DBMS): ")
     difficulty = input("Enter difficulty (beginner/intermediate/advanced): ")
@@ -171,24 +209,36 @@ def main():
 
     questions = generate_questions(domain, difficulty)
 
-    results = []
+    qa_list = []
 
     for i, q in enumerate(questions, 1):
 
         print(f"\nQuestion {i}: {q}")
 
-        answer = input("\nYour Answer: ")
+        answer = input("Your Answer (type 'exit' to stop): ")
 
-        print("\nEvaluating answer...")
+        if answer.lower() == "exit":
+            break
 
-        result = evaluate_answer(domain, difficulty, q, answer)
+        qa_list.append({
+            "question": q,
+            "user_answer": answer
+        })
 
-        results.append(result)
+    print("\n⚡ Evaluating all answers at once...\n")
 
-        print("\nScore:", result["score"])
-        print("Feedback:", result["feedback"])
+    results = evaluate_answers_batch(domain, difficulty, qa_list)
 
-    print("\nInterview Completed!\n")
+    print("\n📊 RESULTS:\n")
+
+    for r in results:
+        print("\n---------------------------")
+        print("Question:", r.get("question", ""))
+        print("Score:", r.get("score", 0))
+        print("Feedback:", r.get("feedback", ""))
+        print("---------------------------")
+
+    print("\n✅ Interview Completed!\n")
 
 
 if __name__ == "__main__":
