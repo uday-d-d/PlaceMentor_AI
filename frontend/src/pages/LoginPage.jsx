@@ -68,7 +68,7 @@ export default function LoginPage() {
                   <div className="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none text-outline">
                     <span className="material-symbols-outlined text-[20px]">person</span>
                   </div>
-                  <input className="block w-full pl-[44px] pr-md py-md bg-white border border-outline rounded-lg font-body-md text-body-md focus:ring-2 focus:ring-primary-fixed focus:border-primary transition-all outline-none" id="username" placeholder="Enter your student ID or email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+                  <input className="block w-full pl-[44px] pr-md py-md bg-white border border-outline rounded-lg font-body-md text-body-md focus:ring-2 focus:ring-primary-fixed focus:border-primary transition-all outline-none" id="username" placeholder="Enter your username or email" type="text" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
                 </div>
               </div>
 

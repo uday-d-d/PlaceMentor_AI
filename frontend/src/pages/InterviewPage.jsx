@@ -39,6 +39,9 @@ export default function InterviewPage() {
           const res = await api.post('/interview/tab-switch', { interview_id: interviewId });
           if (res.data.terminated) {
             setTabWarning({ type: 'terminated', message: res.data.warning });
+            // Immediately lock everything
+            stopListening();
+            setPhase('terminated');
             setTimeout(() => navigate('/dashboard'), 3000);
           } else {
             setTabWarning({ type: 'warning', message: res.data.warning });

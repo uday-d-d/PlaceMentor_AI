@@ -85,7 +85,7 @@ export default function InterviewResults() {
               <div key={i} className={`p-5 rounded-xl border ${a.score >= 7.0 ? 'bg-green-50/50 border-green-200' : 'bg-orange-50/50 border-orange-200'}`}>
                 <div className="flex justify-between mb-2">
                   <h4 className="font-medium"><span className="text-on-surface-variant mr-2">Q{a.question_index+1}.</span>{a.question}</h4>
-                  <span className={`px-3 py-1 rounded-full text-sm font-bold ${a.score >= 7.0 ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>{(a.score*10).toFixed(0)}%</span>
+                  <span className={`px-3 py-1 rounded-full text-sm font-bold ${a.score >= 7.0 ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>{a.score?.toFixed(1)} / 10</span>
                 </div>
                 <p className="text-sm text-on-surface-variant mt-2"><b>Your answer:</b> {a.user_answer || 'N/A'}</p>
                 {a.feedback && <p className="text-sm text-blue-700 mt-1"><b>Feedback:</b> {a.feedback}</p>}

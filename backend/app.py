@@ -340,27 +340,55 @@ def register_routes(app, db):
         try:
             root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             sys.path.insert(0, root)
-            from model_ollama import generate_questions
-            raw_questions = generate_questions(domain, difficulty)
+            import importlib
+            import model_ollama
+            importlib.reload(model_ollama)
+            raw_questions = model_ollama.generate_questions(domain, difficulty)
             # Normalize: LLM may return [{"question": "..."}] instead of ["..."]
             def extract_q(q):
                 if isinstance(q, dict):
                     return q.get("question") or q.get("text") or str(q)
                 return str(q)
-            questions = [extract_q(q) for q in raw_questions if q][:15]
+            questions = [extract_q(q) for q in raw_questions if q][:5]
         except Exception:
-            questions = [
-                f"Explain the core concepts of {domain}.",
-                f"What are the key principles of {domain}?",
-                f"Describe a real-world application of {domain}.",
-                f"What are common challenges in {domain}?",
-                f"How would you optimize a solution in {domain}?",
-                f"Explain basic vs advanced concepts in {domain}.",
-                f"What tools are commonly used in {domain}?",
-                f"Describe a project related to {domain}.",
-                f"What are best practices for {domain}?",
-                f"How do you stay updated with {domain} trends?",
-            ]
+            import random as rng
+            FALLBACK_QUESTIONS = {
+                "Python": [
+                    "What is Python?", "What are Python data types?", "What is a list in Python?",
+                    "What is the difference between a list and a tuple?", "What is a dictionary?",
+                    "What are Python decorators?", "Explain list comprehension.", "What is PIP?",
+                    "What is the difference between == and is?", "What is a lambda function?",
+                    "What are *args and **kwargs?", "What is exception handling in Python?",
+                    "What is the GIL in Python?", "What is the difference between append and extend?",
+                    "What is a virtual environment?"
+                ],
+                "Web Development": [
+                    "What is HTML?", "What is CSS?", "What is JavaScript?",
+                    "What is the DOM?", "What is responsive design?",
+                    "What is the difference between GET and POST?", "What is an API?",
+                    "What does REST stand for?", "What is a cookie?", "What is local storage?",
+                    "What is the box model in CSS?", "What is flexbox?", "What is React?",
+                    "What is Node.js?", "What is CORS?"
+                ],
+                "DBMS": [
+                    "What is a database?", "What is SQL?", "What is a primary key?",
+                    "What is normalization?", "What is a foreign key?",
+                    "What is the difference between SQL and NoSQL?", "What is an index?",
+                    "What are ACID properties?", "What is a JOIN?", "Name types of JOINs.",
+                    "What is a stored procedure?", "What is a view?", "What is a trigger?",
+                    "What is a transaction?", "What is denormalization?"
+                ],
+                "Data Structures": [
+                    "What is an array?", "What is a linked list?", "What is a stack?",
+                    "What is a queue?", "What is a binary tree?",
+                    "What is the difference between a stack and a queue?", "What is a hash table?",
+                    "What is BFS?", "What is DFS?", "What is time complexity?",
+                    "What is Big O notation?", "What is a graph?", "What is a heap?",
+                    "What is a balanced binary tree?", "What is recursion?"
+                ],
+            }
+            pool = FALLBACK_QUESTIONS.get(domain, FALLBACK_QUESTIONS["Python"])
+            questions = rng.sample(pool, min(5, len(pool)))
 
         interview = {
             "student_id": user_id, "domain": domain, "difficulty": difficulty,
@@ -403,8 +431,10 @@ def register_routes(app, db):
         try:
             root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             sys.path.insert(0, root)
-            from model_ollama import evaluate_answer
-            evaluation = evaluate_answer(interview.get("domain", "Python"), interview.get("difficulty", "intermediate"), question, user_answer)
+            import importlib
+            import model_ollama
+            importlib.reload(model_ollama)
+            evaluation = model_ollama.evaluate_answer(interview.get("domain", "Python"), interview.get("difficulty", "intermediate"), question, user_answer)
         except Exception as e:
             print(f"[DEBUG] Evaluation failed: {e}")
             import traceback
@@ -584,15 +614,105 @@ def register_routes(app, db):
     def api_admin_setup():
         from utils.auth import hash_password
         from datetime import datetime
-        existing = db.admins.find_one({"email": "admin@placementor.ai"})
+        existing = db.admins.find_one({"email": "admin"})
         if existing:
             return jsonify({"message": "Admin already exists"}), 200
-        admin = {"name": "Admin", "email": "admin@placementor.ai", "password": hash_password("admin123"), "role": "admin", "created_at": datetime.utcnow()}
+        admin = {"name": "Admin", "email": "admin", "password": hash_password("admin123"), "role": "admin", "created_at": datetime.utcnow()}
         db.admins.insert_one(admin)
-        return jsonify({"message": "Admin account created", "email": "admin@placementor.ai", "password": "admin123"}), 201
+        return jsonify({"message": "Admin account created", "email": "admin", "password": "admin123"}), 201
+
+    @app.route("/api/admin/interviews", methods=["GET"])
+    def api_admin_interviews():
+        from utils.auth import verify_jwt
+        token = request.headers.get("Authorization", "").replace("Bearer ", "")
+        payload = verify_jwt(token)
+        if not payload or payload.get("role") != "admin":
+            return jsonify({"error": "Admin access required"}), 403
+
+        status_filter = request.args.get("status", "")
+        query = {"status": status_filter} if status_filter else {}
+
+        interviews = list(db.interviews.find(query).sort("created_at", -1).limit(50))
+        result = []
+        for i in interviews:
+            student = db.students.find_one({"_id": __import__('bson').ObjectId(i["student_id"])}) if i.get("student_id") else None
+            result.append({
+                "id": str(i["_id"]),
+                "student_name": student["name"] if student else "Unknown",
+                "student_email": student["email"] if student else "",
+                "domain": i.get("domain", ""),
+                "difficulty": i.get("difficulty", ""),
+                "status": i.get("status", ""),
+                "total_score": i.get("total_score", 0),
+                "questions_count": len(i.get("questions", [])),
+                "answered_count": len(i.get("answers", [])),
+                "tab_switches": i.get("tab_switches", 0),
+                "terminated_reason": i.get("terminated_reason", ""),
+                "created_at": str(i.get("created_at", "")),
+                "completed_at": str(i.get("completed_at", ""))
+            })
+        return jsonify({"interviews": result}), 200
+
+    @app.route("/api/admin/student/<student_id>", methods=["GET"])
+    def api_admin_student_detail(student_id):
+        from utils.auth import verify_jwt
+        from bson import ObjectId
+        token = request.headers.get("Authorization", "").replace("Bearer ", "")
+        payload = verify_jwt(token)
+        if not payload or payload.get("role") != "admin":
+            return jsonify({"error": "Admin access required"}), 403
+
+        student = db.students.find_one({"_id": ObjectId(student_id)})
+        if not student:
+            return jsonify({"error": "Student not found"}), 404
+
+        interviews = list(db.interviews.find({"student_id": student_id}).sort("created_at", -1))
+        interview_list = [{
+            "id": str(i["_id"]), "domain": i.get("domain", ""), "difficulty": i.get("difficulty", ""),
+            "status": i.get("status", ""), "total_score": i.get("total_score", 0),
+            "questions_count": len(i.get("questions", [])), "answered_count": len(i.get("answers", [])),
+            "tab_switches": i.get("tab_switches", 0), "created_at": str(i.get("created_at", ""))
+        } for i in interviews]
+
+        aptitude = list(db.aptitude_results.find({"student_id": student_id}).sort("created_at", -1))
+        aptitude_list = [{
+            "id": str(a["_id"]), "domain": a.get("domain", ""),
+            "score_percentage": a.get("score_percentage", 0), "total_questions": a.get("total_questions", 0),
+            "correct_answers": a.get("correct_answers", 0), "created_at": str(a.get("created_at", ""))
+        } for a in aptitude]
+
+        return jsonify({
+            "student": {
+                "id": str(student["_id"]), "name": student["name"], "email": student["email"],
+                "branch": student.get("branch", ""), "domain": student.get("domain", ""),
+                "year_of_study": student.get("year_of_study", ""), "created_at": str(student.get("created_at", ""))
+            },
+            "interviews": interview_list,
+            "aptitude_results": aptitude_list
+        }), 200
 
 
 register_routes(app, db)
+
+
+# ----------------------------
+# Auto-seed Admin Account
+# ----------------------------
+def seed_admin():
+    from utils.auth import hash_password
+    from datetime import datetime
+    existing = db.admins.find_one({"email": "admin"})
+    if not existing:
+        db.admins.insert_one({
+            "name": "Admin", "email": "admin",
+            "password": hash_password("admin123"),
+            "role": "admin", "created_at": datetime.utcnow()
+        })
+        print("[SEED] Admin account created (admin / admin123)")
+    else:
+        print("[SEED] Admin account already exists")
+
+seed_admin()
 
 
 # ----------------------------
@@ -607,8 +727,9 @@ def health_check():
 # Run Application
 # ----------------------------
 if __name__ == "__main__":
-    print("\n🚀 PlaceMentor AI Backend Server Starting...")
-    print("📦 MongoDB:", Config.MONGO_URI)
-    print("🤖 Ollama:", Config.OLLAMA_BASE_URL)
-    print("🌐 Server: http://localhost:5000\n")
+    print("\n[*] PlaceMentor AI Backend Server Starting...")
+    print("[DB] MongoDB:", Config.MONGO_URI)
+    print("[AI] Ollama:", Config.OLLAMA_BASE_URL)
+    print("[OK] Server: http://localhost:5000\n")
     app.run(debug=True, host="0.0.0.0", port=5000)
+

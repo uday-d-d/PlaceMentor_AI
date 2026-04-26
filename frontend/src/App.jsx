@@ -9,6 +9,8 @@ import AptitudeTest from './pages/AptitudeTest';
 import TestInterface from './pages/TestInterface';
 import InterviewPage from './pages/InterviewPage';
 import InterviewResults from './pages/InterviewResults';
+import InterviewHistoryPage from './pages/InterviewHistoryPage';
+import ProfilePage from './pages/ProfilePage';
 import AdminDashboard from './pages/AdminDashboard';
 
 function ProtectedRoute({ children, adminOnly = false }) {
@@ -28,9 +30,11 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
           <Route path="/aptitude" element={<ProtectedRoute><AptitudeTest /></ProtectedRoute>} />
           <Route path="/aptitude/test" element={<ProtectedRoute><TestInterface /></ProtectedRoute>} />
           <Route path="/interview" element={<ProtectedRoute><InterviewPage /></ProtectedRoute>} />
+          <Route path="/interview/history" element={<ProtectedRoute><InterviewHistoryPage /></ProtectedRoute>} />
           <Route path="/interview/results/:id" element={<ProtectedRoute><InterviewResults /></ProtectedRoute>} />
           <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" />} />
@@ -41,3 +45,4 @@ function App() {
 }
 
 export default App;
+

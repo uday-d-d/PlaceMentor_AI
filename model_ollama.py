@@ -56,7 +56,7 @@ def safe_completion(messages, retries=3, delay=1):
 # ----------------------------
 def generate_questions(domain, difficulty, count=None):
     if count is None:
-        count = random.randint(10, 15)
+        count = 5
 
     prompt = f"""
     Generate exactly {count} simple interview questions for "{domain}" at "{difficulty}" level.
@@ -235,7 +235,7 @@ def keyword_score(user_answer, correct_answer, question):
     print(f"[SCORE] Target keywords : {sorted(target_kws)}")
     print(f"[SCORE] User keywords   : {sorted(user_kws)}")
     print(f"[SCORE] Matched         : {sorted(matched)}")
-    print(f"[SCORE] Ratio: {ratio:.2f}  →  Score: {score}")
+    print(f"[SCORE] Ratio: {ratio:.2f}  -->  Score: {score}")
 
     return score
 

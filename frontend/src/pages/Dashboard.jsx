@@ -25,6 +25,7 @@ export default function Dashboard() {
     setActiveNav(id);
     if (id === 'aptitude') navigate('/aptitude');
     else if (id === 'interview') navigate('/interview');
+    else if (id === 'results') navigate('/interview/history');
   };
 
   if (loading) return (
@@ -149,7 +150,7 @@ export default function Dashboard() {
                 <span className="material-symbols-outlined">quiz</span>
                 <span className="font-medium">Take Aptitude Test</span>
               </button>
-              <button onClick={() => alert('Profile settings feature coming soon!')} className="w-full flex items-center gap-3 p-4 bg-surface-container text-on-surface rounded-xl hover:bg-surface-container-high transition-all active:scale-[0.98]">
+              <button onClick={() => navigate('/profile')} className="w-full flex items-center gap-3 p-4 bg-surface-container text-on-surface rounded-xl hover:bg-surface-container-high transition-all active:scale-[0.98]">
                 <span className="material-symbols-outlined">person</span>
                 <span className="font-medium">View Profile</span>
               </button>
@@ -163,7 +164,7 @@ export default function Dashboard() {
           <div className="bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm">
             <div className="flex justify-between items-center mb-6">
               <h3 className="font-h3 text-lg text-on-surface">Recent Interviews</h3>
-              <span className="text-sm text-secondary font-medium cursor-pointer hover:underline">View All</span>
+              <span onClick={() => navigate('/interview/history')} className="text-sm text-secondary font-medium cursor-pointer hover:underline">View All</span>
             </div>
             {(data?.interview_history || []).length === 0 ? (
               <div className="text-center py-10 text-on-surface-variant">
@@ -173,7 +174,8 @@ export default function Dashboard() {
             ) : (
               <div className="space-y-3">
                 {(data?.interview_history || []).map((item, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 bg-surface-container-low rounded-xl hover:bg-surface-container transition-colors">
+                  <div key={i} onClick={() => item.status === 'completed' ? navigate(`/interview/results/${item.id}`) : null}
+                    className={`flex items-center justify-between p-4 bg-surface-container-low rounded-xl hover:bg-surface-container transition-colors ${item.status === 'completed' ? 'cursor-pointer' : ''}`}>
                     <div className="flex items-center gap-3">
                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${item.status === 'completed' ? 'bg-tertiary-fixed/20' : 'bg-secondary-fixed-dim/20'}`}>
                         <span className="material-symbols-outlined text-[20px]">{item.status === 'completed' ? 'check_circle' : 'pending'}</span>
@@ -194,7 +196,7 @@ export default function Dashboard() {
           <div className="bg-white p-6 rounded-2xl border border-outline-variant/20 shadow-sm">
             <div className="flex justify-between items-center mb-6">
               <h3 className="font-h3 text-lg text-on-surface">Recent Aptitude Tests</h3>
-              <span className="text-sm text-secondary font-medium cursor-pointer hover:underline">View All</span>
+              <span onClick={() => navigate('/aptitude')} className="text-sm text-secondary font-medium cursor-pointer hover:underline">View All</span>
             </div>
             {(data?.aptitude_history || []).length === 0 ? (
               <div className="text-center py-10 text-on-surface-variant">
